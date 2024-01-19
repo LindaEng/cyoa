@@ -23,7 +23,6 @@ const getUserById = async (req: Request, res: Response) => {
         console.log(error);
         res.status(500).json({message: "User Not Found"})
     }
-
 }
 
 const createUser = async (req: Request, res: Response) => {
@@ -34,7 +33,6 @@ const createUser = async (req: Request, res: Response) => {
         console.log(error);
         res.status(500).json({message: "User Not Created"})
     }
-
 }
 
 // const updateUser = async (req: Request, res: Response) => {
