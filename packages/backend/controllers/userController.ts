@@ -37,6 +37,14 @@ const createUser = async (req: Request, res: Response) => {
 
 }
 
+// const updateUser = async (req: Request, res: Response) => {
+//     try {
+//         const user = await User.findById(req.params.id)
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+
 export {
     getUsers,
     getUserById,
