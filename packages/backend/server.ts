@@ -1,14 +1,34 @@
 import express, { Request, Response } from 'express';
+import passport from 'passport';
+import passportConfig  from './config/passport-config';
+import session from 'express-session';
+
 const app = express();
 const port = 3000;
 
+
 import dotenv from 'dotenv'
 dotenv.config()
+const sessionSecret = process.env.SESSION_SECRET || ''
 
-import mongoose from 'mongoose'
+import mongoose, { mongo } from 'mongoose'
 const mongoUrl = process.env.MONGO_URL || ''
 
 import userRoutes from './routes/userRoutes'
+
+// Configure express-session before passport
+app.use(session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: false
+}))
+
+// Initalize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+//configure passport with google oauth 2.0 strategy
+passportConfig(passport)
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))

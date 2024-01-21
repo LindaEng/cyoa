@@ -1,5 +1,5 @@
 import express, {Request, Response} from 'express'
-const Router = express.Router()
+
 
 import User from '../models/userSchema'
 
