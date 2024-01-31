@@ -15,6 +15,7 @@ import mongoose, { mongo } from 'mongoose'
 const mongoUrl = process.env.MONGO_URL || ''
 
 import userRoutes from './routes/userRoutes'
+import authRoutes from './routes/authRoutes'
 
 // Configure express-session before passport
 app.use(session({
@@ -38,6 +39,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api/users', userRoutes)
+app.use('/auth', authRoutes)
 
 mongoose.connect(mongoUrl).then(() => {
      app.listen(port, () => console.log(`Example app listening on port ${port}!`)); 

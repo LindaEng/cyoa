@@ -13,7 +13,7 @@ const getGoogleAuthCallback = (req, res, next) => {
         if (!user) { return res.redirect('/login'); } // or wherever you want to redirect in case of failure
         req.logIn(user, function(err) {
             if (err) { return next(err); }
-            return res.redirect('/users/' + user.username); // or wherever you want to redirect in case of success
+            return res.redirect('/api/users/'); // or wherever you want to redirect in case of success
         });
     })(req, res, next);
 }

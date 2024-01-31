@@ -1,5 +1,5 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const User = require('../models/userSchema');
+import User from '../models/userSchema'
 
 const passportConfig = (passport) => {
     passport.use(new GoogleStrategy({
@@ -14,6 +14,7 @@ const passportConfig = (passport) => {
       if (existingUser) {
         done(null, existingUser);
       } else {
+        console.log("ATTEMPTING TO CREATE NEW USER ", profile);
         const newUser = await new User({
           googleId: profile.id,
           username: profile.displayName,

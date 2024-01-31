@@ -7,7 +7,9 @@ const user = new mongoose.Schema({
     },
     name: {
         type: String,
-        required: true
+        required: function() {
+            return this.googleId === null
+        }
     },
     username: {
         type: String,   
@@ -19,7 +21,9 @@ const user = new mongoose.Schema({
     },
     password: {
         type: String,   
-        required: true
+        required: function() {
+            return this.googleId === null
+        }
     },
     lessonPlans: [{
         type: mongoose.Schema.Types.ObjectId,
