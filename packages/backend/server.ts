@@ -38,6 +38,7 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!');
 });
 
+//Routes
 app.use('/api/users', userRoutes)
 app.use('/auth', authRoutes)
 
