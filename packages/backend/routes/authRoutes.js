@@ -1,5 +1,5 @@
 import express from 'express'
-import { getGoogleAuth, getGoogleAuthCallback } from '../controllers/authController'
+import { getGoogleAuth, getGoogleAuthCallback } from '../controllers/authController.js'
 const router = express.Router()
 
 //Route for initiating Google OAuth process

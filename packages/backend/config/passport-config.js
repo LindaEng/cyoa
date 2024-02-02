@@ -1,5 +1,6 @@
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-import User from '../models/userSchema'
+import pkg from 'passport-google-oauth20';
+const { Strategy: GoogleStrategy } = pkg;
+import User from '../models/userSchema.js'
 
 const passportConfig = (passport) => {
     passport.use(new GoogleStrategy({
