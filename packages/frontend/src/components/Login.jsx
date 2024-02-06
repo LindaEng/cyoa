@@ -15,11 +15,17 @@ export const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         console.log("THIS IS IT!",login);
-        // await api.post('/login', login).then(res => {
-        //     console.log(res);
-        // }).catch(err => {
-        //     console.log(err);
-        // })
+        await api.post('/login', login).then(res => {
+            console.log(res, "Login successful!");
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
+    const handleOnClick = (e) => {
+        console.log("Google login", import.meta.env.VITE_APP_BASE_URL + '/auth/google');
+        e.preventDefault()
+        window.location.href = import.meta.env.VITE_APP_BASE_URL + '/auth/google'
     }
 
     return (
@@ -29,6 +35,7 @@ export const Login = () => {
                 <input type="password"  name="password" placeholder="password" onChange={handleChange}/>
                 <button>Login</button>
             </form>
+            <button onClick={handleOnClick}>Log with Google</button>
         </div>
     )
 }
