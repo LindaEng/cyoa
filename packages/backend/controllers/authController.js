@@ -12,8 +12,9 @@ const getGoogleAuthCallback = (req, res, next) => {
         if (err) { return next(err); }
         if (!user) { return res.redirect('/login'); } // or wherever you want to redirect in case of failure
         req.logIn(user, function(err) {
+            console.log("USER ", user);
             if (err) { return next(err); }
-            return res.redirect('/api/users/'); // or wherever you want to redirect in case of success
+            return res.redirect('http://localhost:5173/'); // or wherever you want to redirect in case of success
         });
     })(req, res, next);
 }

@@ -1,6 +1,8 @@
 import pkg from 'passport-google-oauth20';
 const { Strategy: GoogleStrategy } = pkg;
+import LocalStrategy from 'passport-local';
 import User from '../models/userSchema.js'
+import bcrypt from 'bcrypt';
 
 const passportConfig = (passport) => {
     passport.use(new GoogleStrategy({
@@ -37,4 +39,27 @@ const passportConfig = (passport) => {
   });
 };
 
-export default passportConfig
+const localConfig = (passport) => {
+  passport.use(new LocalStrategy(
+    async (username, password, done) => {
+      const user =  await User.findOne({ username: username });
+      if( user && bcrypt.compareSync(password, user.password) ) {
+        return done(null, user);
+      } else {
+        return done(null, false, { message: 'Invalid username or password' });
+      }
+    })
+  )
+
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
+
+  passport.deserializeUser((id, done) => {
+    User.findById(id).then(user => {
+      done(err, user)
+    })
+  })  
+}
+
+export { passportConfig, localConfig }

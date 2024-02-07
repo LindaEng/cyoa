@@ -7,9 +7,7 @@ const user = new mongoose.Schema({
     },
     name: {
         type: String,
-        required: function() {
-            return this.googleId === null
-        }
+        required: false
     },
     username: {
         type: String,   

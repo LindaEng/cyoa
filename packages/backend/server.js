@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import passportConfig  from './config/passport-config.js';
+import {passportConfig, localConfig}  from './config/passport-config.js';
 import session from 'express-session';
 import cors from 'cors';
 
@@ -18,7 +18,7 @@ import userRoutes from './routes/userRoutes.js'
 import authRoutes from './routes/authRoutes.js'
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:5173',
     credentials: true
 }))
 
@@ -26,8 +26,11 @@ app.use(cors({
 app.use(session({
     secret: sessionSecret,
     resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }
+    saveUninitialized: true,
+    cookie: {
+        sameSite: 'lax',
+        secure: false // only set Secure in a production environment
+    }
 }))
 
 // Initalize Passport
@@ -36,6 +39,7 @@ app.use(passport.session());
 
 //configure passport with google oauth 2.0 strategy
 passportConfig(passport)
+localConfig(passport)
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
