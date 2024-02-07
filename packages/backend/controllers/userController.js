@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import passport from 'passport'
 import User from '../models/userSchema.js'
-import { info } from 'console';
+
 
 //CRUD
 const getUsers = async (req, res) => {
@@ -97,6 +97,13 @@ const login = async (req, res, next) => {
     })(req, res, next)
 }
 
+const logout = (req, res) => {
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        res.send(200);
+      });
+}
+
 
 export {
     getUsers,
@@ -106,4 +113,5 @@ export {
     updateUser,
     deleteUser,
     login,
+    logout
 }

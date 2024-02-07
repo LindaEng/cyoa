@@ -11,7 +11,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 const sessionSecret = process.env.SESSION_SECRET || ''
 
-import mongoose, { mongo } from 'mongoose'
+import mongoose from 'mongoose'
 const mongoUrl = process.env.MONGO_URL || ''
 
 import userRoutes from './routes/userRoutes.js'
