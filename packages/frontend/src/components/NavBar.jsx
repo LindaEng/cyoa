@@ -39,12 +39,16 @@ export const NavBar = () => {
     return (
         <div>
             {navLinks.map((link, index) => {
-                if((link.name === "Log In" || link.name === "Sign Up") && (isLoggedIn)) {
-                    return null
+                if(isLoggedIn && link.requiresLogin || link.name === "Home") {
+                    return (
+                        <a key={index} href={link.path}>{link.name}</a>
+                    )
                 }
-                return (
-                    <a key={index} href={link.path}>{link.name}</a>
-                )
+                if(!isLoggedIn && !link.requiresLogin) {
+                    return (
+                        <a key={index} href={link.path}>{link.name}</a>
+                    )
+                }
             })}
             {(isLoggedIn) ? 
             <button onClick={logOut}>
