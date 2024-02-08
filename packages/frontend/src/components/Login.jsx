@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import { api } from '../api/index.js'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 export const Login = () => {
     const [login, setLogin] = useState({
         username: '',
         password: ''
     })
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setLogin({...login, [e.target.name]: e.target.value})
@@ -15,15 +19,16 @@ export const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         console.log("THIS IS IT!",login);
-        await api.post('/login', login).then(res => {
+        await api.post('/api/users/login', login, { withCredentials: true }).then(res => {
             console.log(res, "Login successful!");
+            navigate('/')
         }).catch(err => {
             console.log(err);
         })
     }
 
     const handleOnClick = (e) => {
-        console.log("Google login", import.meta.env.VITE_APP_BASE_URL + '/auth/google');
+        console.log("Google login", import.meta.env.VITE_APP_TEST);
         e.preventDefault()
         window.location.href = import.meta.env.VITE_APP_BASE_URL + '/auth/google'
     }
