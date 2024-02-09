@@ -1,36 +1,21 @@
 import {useState, useEffect} from 'react'
 import {navLinks} from '../constants/links.js'
 import { api } from '../api/index.js'
+import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
-
+import { UserContext } from '../contexts/UserContext.jsx';
 
 export const NavBar = () => {
-    const [user, setUser] = useState({})
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-
+    const { user, isLoggedIn, setUser, setIsLoggedIn } = useContext(UserContext)
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const getMe = async () => {
-            try {
-                const res = await api.get('/api/users/me', { withCredentials: true });
-                setUser(res.data);
-                setIsLoggedIn(true)
-            } catch (err) {
-                console.log('no logged in user')
-                setIsLoggedIn(false)
-            }
-        };
-
-        getMe();
-    }, [])
 
     const logOut = async () => {
         try {
-            await api.post('/api/users/logout')
-            setUser({})
-            setIsLoggedIn(false)
-            navigate('/')
+            await api.post('/api/users/logout');
+            setUser({}); // Clear the user data
+            setIsLoggedIn(false); // Set isLoggedIn to false
+            navigate('/');
         } catch (error) {
             console.error(error);
         }

@@ -3,6 +3,7 @@ import { Login } from "./Login";
 import { Learning } from "./Learning"
 import { Signup } from "./Signup"
 import { HomePage } from "./HomePage"
+import { Account } from "./Account"
 
 
 export { 
@@ -10,5 +11,6 @@ export {
     Login,
     Learning,
     Signup,
-    HomePage
+    HomePage,
+    Account
 };

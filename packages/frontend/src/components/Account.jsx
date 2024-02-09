@@ -1,19 +1,29 @@
-import { useState, useEffect } from 'react'
-import { api } from '../api/index.js'
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../contexts/UserContext.jsx';
+import { set } from 'mongoose';
+import { api } from '../api/index.js';
 
-const Account = () => {
-    const [user, setUser] = useState({})
+export const Account = () => {
+    const { user, setUser, setIsLoggedIn } = useContext(UserContext);
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const res = await api.get('/api/users/me', { withCredentials: true });
-                setUser(res.data);
-            } catch (err) {
-                console.log('no logged in user')
-            }
-        };
+    const deleteAccount = async () => {
+        try {
+            await api.delete(`/api/users/${user._id}`, { withCredentials: true });
+            setUser({})
+            setIsLoggedIn(false);
+            navigate('/');
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
-        fetchUser();
-    })
+    return (
+        <div>
+            <h1>Account</h1>
+            <p>{user.username}</p>
+            <button onClick={deleteAccount}>Delete Account</button>
+        </div>
+    )
 }

@@ -6,13 +6,15 @@ import {
   Login,
   Learning,
   Signup,
+  Account
 } from './components/index'
+import { UserProvider } from './contexts/UserContext'
 
 function App() {
-  
 
   return (
     <>
+    <UserProvider>
       <Router> 
         <NavBar />
         <Routes>
@@ -20,8 +22,10 @@ function App() {
           <Route path="/learning" element={<Learning/>} />
           <Route path="/login" element={<Login/>}/>
           <Route path="/signup" element={<Signup/>} />
+          <Route path="/account" element={<Account/>}/>
         </Routes>
       </Router>
+      </UserProvider>
     </>
   )
 }

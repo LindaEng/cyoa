@@ -1,8 +1,12 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { UserContext } from '../contexts/UserContext.jsx'
 import { api } from '../api/index.js'
 
 export const Signup = () => {
     const [signup, setSignup] = useState({})
+    const { user, setUser, setIsLoggedIn } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setSignup({...signup, [e.target.name]: e.target.value})
@@ -14,6 +18,9 @@ export const Signup = () => {
         if(signup.password === signup.password2) {
             await api.post('/api/users/signup', signup, { withCredentials: true }).then(res => {
                 console.log(res, "Signup successful!");
+                setUser(res.data);
+                setIsLoggedIn(true);
+                navigate('/')
             }).catch(err => {
                 console.log(err);
         })} else {

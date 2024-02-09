@@ -1,13 +1,16 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { api } from '../api/index.js'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { UserContext } from '../contexts/UserContext.jsx'
+
 
 export const Login = () => {
     const [login, setLogin] = useState({
         username: '',
         password: ''
     })
+    const { setUser, setIsLoggedIn } = useContext(UserContext)
 
     const navigate = useNavigate();
 
@@ -21,6 +24,8 @@ export const Login = () => {
         console.log("THIS IS IT!",login);
         await api.post('/api/users/login', login, { withCredentials: true }).then(res => {
             console.log(res, "Login successful!");
+            setUser(res.data);
+            setIsLoggedIn(true);
             navigate('/')
         }).catch(err => {
             console.log(err);
