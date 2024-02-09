@@ -58,7 +58,17 @@ const deleteUser = async (req, res) => {
         if (result.deletedCount === 0) {
             res.status(404).json({ message: "User not found" });
         } else {
-            res.status(200).json({ message: "User deleted successfully" });
+            //Invalidate the session
+            req.session.destroy((err) => {
+                if(err) {
+                    console.log(err);
+                    return res.status(500).json({ message: "Error deleting user" });
+                }
+                //clear the cookie
+                res.clearCookie('connect.sid')
+
+                res.status(200).json({ message: "User deleted successfully" });
+            })
         }
     } catch (error) {
         console.log(error);
