@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import passport from 'passport'
 import User from '../models/userSchema.js'
+import LessonPlan from '../models/lessonPlan.js'
 
 
 //CRUD
@@ -34,6 +35,15 @@ const getUserById = async (req, res) => {
     }
 }
 
+const getUserLessons = async (req, res) => {
+    try {
+        const userLessons = await User.findById(req.params.id).populate('lessonPlans')
+        res.status(200).json(userLessons.lessonPlans)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Error getting user lessons"})
+    }
+}
 
 
 const updateUser = async (req, res) => {
@@ -119,6 +129,7 @@ export {
     getUsers,
     getMe,
     getUserById,
+    getUserLessons,
     createUser,
     updateUser,
     deleteUser,
