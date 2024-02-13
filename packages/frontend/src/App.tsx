@@ -5,6 +5,7 @@ import {
   NavBar,
   Login,
   Learning,
+  LearningHome,
   Signup,
   Account
 } from './components/index'
@@ -19,7 +20,8 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/" element={<HomePage/>} />
-          <Route path="/learning" element={<Learning/>} />
+          <Route path="/learning" element={<LearningHome/>} />
+          <Route path="/learning/new" element={<Learning/>} />
           <Route path="/login" element={<Login/>}/>
           <Route path="/signup" element={<Signup/>} />
           <Route path="/account" element={<Account/>}/>
