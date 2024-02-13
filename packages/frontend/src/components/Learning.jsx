@@ -10,9 +10,28 @@ export const Learning = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const res = await api.post('/api/chat',{ message: userMessage });
-        setResponse(res.data);
+        try {
+            const res = await api.post('/api/chat',{ message: userMessage });
+            setResponse(res.data);            
+        } catch (error) {
+            console.error(error)
+        }
     };
+
+    const handleSave = async (event) => {
+        console.log("RESPONSE ", response);
+        event.preventDefault();
+        if(!userMessage) return console.log("No message to save!")
+        else {
+            const body = {title: userMessage, lesson: response, user: user._id}
+            try {
+                const res = await api.post('/api/lessons', body);
+                console.log("Lesson saved!", res);
+            } catch (error) {
+                console.error(error)
+            }
+        }
+    }    
 
     return (
         <div>
@@ -22,6 +41,7 @@ export const Learning = () => {
             : <p>Please login to chat</p>
             } 
             <p>{response}</p>      
+            <button onClick={handleSave}>Save Lesson Plan!</button>
         </div>
     );
 };

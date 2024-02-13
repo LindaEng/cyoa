@@ -17,6 +17,7 @@ const mongoUrl = process.env.MONGO_URL || ''
 import userRoutes from './routes/userRoutes.js'
 import authRoutes from './routes/authRoutes.js'
 import chatRoutes from './routes/chatRoutes.js'
+import lessonRoutes from './routes/lessonRoutes.js'
 
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -51,8 +52,10 @@ app.get('/', (req, res) => {
 
 //Routes
 app.use('/api/users', userRoutes)
+app.use('/api/lessons', lessonRoutes)
 app.use('/auth', authRoutes)
 app.use('/api/chat', chatRoutes)
+
 
 mongoose.connect(mongoUrl).then(() => {
      app.listen(port, () => console.log(`Example app listening on port ${port}!`)); 

@@ -5,12 +5,8 @@ const lessonPlan = new mongoose.Schema({
         type: String,
         required: true
     },
-    description: {
-        type: String,   
-        required: true
-    },
-    date: {
-        type: Date,
+    lesson: {
+        type: String,
         required: true
     },
     user: {
@@ -21,4 +17,4 @@ const lessonPlan = new mongoose.Schema({
 
 const LessonPlan = mongoose.model('LessonPlan', lessonPlan)
 
-module.exports = LessonPlan
+export default LessonPlan
