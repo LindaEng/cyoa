@@ -1,8 +1,9 @@
 import { useState, useEffect} from 'react';
 import { api } from "../api"
+import { set } from 'mongoose';
 
 
-export const LearningCard = ({ title, lesson }) => {
+export const LearningCard = ({ id, title, lesson }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(title);
     const [editedLesson, setEditedLesson] = useState(lesson);
@@ -38,12 +39,16 @@ export const LearningCard = ({ title, lesson }) => {
     
 
     const handleSave = async () => {
+        console.log(id);
         try {
-            const res = await api.put(`/api/lessons/${lesson._id}`, {
+            const res = await api.put(`/api/lessons/${id}`, {
                 title: editedTitle,
                 lesson: editedLesson
             });
             console.log('res', res);
+            setIsEditing(false);
+            setEditedTitle(editedTitle);
+            setEditedLesson(editedLesson);
         } catch (error) {
             console.error(error);
         }
@@ -51,7 +56,7 @@ export const LearningCard = ({ title, lesson }) => {
 
     return (
         <div className={`border border-gray-900 shadow-lg flex flex-col justify-center items-center transition-all duration-300 m-2 p-4 rounded `}>
-            <div onClick={handleEditClick}>{(isEditing) ? <button onClick={handleSave}>Save</button> : 'Edit'}</div>
+            <div onClick={handleEditClick}>{(isEditing) ? <button onMouseDown={handleSave}>Save</button> : 'Edit'}</div>
             {(isEditing) && (
                 <button onMouseDown={handleCancel}>Cancel</button>
             )}

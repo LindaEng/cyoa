@@ -40,11 +40,10 @@ const createLesson = async (req, res) => {
 
 const updateLesson = async (req, res) => {
     try {
-        const userId = req.params.id
-        const lessonId = req.params.lessonId
+        const lessonId = req.params.id
         const updatedLesson = req.body
 
-        await LessonPlan.updateOne({ _id: lessonId, user: userId }, updatedLesson);
+        await LessonPlan.updateOne({ _id: lessonId }, updatedLesson);
 
         res.status(200).json({message: "Lesson updated successfully"})
 

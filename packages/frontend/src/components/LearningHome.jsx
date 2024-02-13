@@ -30,7 +30,8 @@ export const LearningHome = () => {
             {lessons.map((lessonPlan, index) => {
                 return(
                     <LearningCard 
-                        key={index} 
+                        key={index}
+                        id={lessonPlan._id} 
                         title={lessonPlan.title}  
                         lesson={lessonPlan.lesson}/>
                 )
