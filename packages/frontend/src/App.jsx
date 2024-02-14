@@ -27,7 +27,7 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/signup" element={<Signup/>} />
           <Route path="/account" element={<Account/>}/>
-          <Route path="/playground" element={<Playground/>} />
+          <Route path="/playground/:id" element={<Playground/>} />
         </Routes>
       </Router>
       </UserProvider>

@@ -2,7 +2,8 @@ import React, {useCallback} from 'react';
 import { useEffect, useState } from 'react'
 import { api } from "../api"
 import { UserContext } from '../contexts/UserContext.jsx';
-import ReactFlow, { useNodesState, useEdgesState, addEdge } from 'reactflow';
+import ReactFlow, { MiniMap, Controls, Background, useNodesState, useEdgesState, addEdge } from 'reactflow';
+import { useParams } from 'react-router-dom';
  
 import 'reactflow/dist/style.css';
  
@@ -22,6 +23,9 @@ export const Playground = () => {
 
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const [lesson, setLesson] = useState({})
+
+    const {id} = useParams();
     
     const onConnect = useCallback(
         (params) => setEdges((eds) => addEdge(params, eds)),
@@ -38,16 +42,32 @@ export const Playground = () => {
         }
     },[])
 
+    useEffect(() => {
+        const fetchLesson = async () => {
+            try {
+                const res = await api.get(`/api/lessons/${id}`);
+                setLesson(res.data);
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        fetchLesson();
+    },[])
 
-
+console.log("LESSON",lesson);
   return (
     <div className={`w-screen h-screen flex flex-col items-center`}>
-      <ReactFlow 
-        nodes={nodes} 
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}/>
+        <h1>{lesson.title}</h1>
+        <ReactFlow 
+            nodes={nodes} 
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}>
+            <Controls />
+            <MiniMap />
+            <Background variant='dots' gap={12} size={1}/>
+        </ReactFlow>
     </div>
   );
 }

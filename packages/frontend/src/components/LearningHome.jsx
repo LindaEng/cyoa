@@ -4,6 +4,7 @@ import { api } from "../api"
 import { UserContext } from '../contexts/UserContext.jsx';
 import { LearningForm } from '../components/LearningForm.jsx';
 import { LearningCard } from '../components/LearningCard.jsx';
+import { Link } from 'react-router-dom';
 
 export const LearningHome = () => {
     const [lessons, setLessons] = useState([{}]);
@@ -31,11 +32,13 @@ export const LearningHome = () => {
             <div className="flex flex-col md:flex-row">
             {lessons.map((lessonPlan, index) => {
                 return(
-                    <LearningCard 
-                        key={index}
-                        id={lessonPlan._id} 
-                        title={lessonPlan.title}  
-                        lessons={lessonPlan.sections}/>
+                    <Link to={`/playground/${lessonPlan._id}`}>
+                        <LearningCard 
+                            key={index}
+                            id={lessonPlan._id} 
+                            title={lessonPlan.title}  
+                            lessons={lessonPlan.sections}/>
+                    </Link>
                 )
             })}
             </div>
