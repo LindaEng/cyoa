@@ -1,10 +1,11 @@
+import React from 'react';
 import { useState, useContext } from 'react';
-import { api } from "../api"
+import { api } from "../api/index.js"
 import { UserContext } from '../contexts/UserContext.jsx';
-import { LearningForm } from '../components/LearningForm.jsx';
+import { LearningForm } from './LearningForm.jsx';
 import { learningPlanParse } from '../utils/learningPlanParse.jsx';
 
-export const Learning = () => {
+export const LearningPlan = () => {
     const [userMessage, setUserMessage] = useState('');
     const [response, setResponse] = useState({});
     const { user, isLoggedIn } = useContext(UserContext);

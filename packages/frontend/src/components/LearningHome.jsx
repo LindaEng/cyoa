@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useContext, useEffect } from 'react';
 import { api } from "../api"
 import { UserContext } from '../contexts/UserContext.jsx';
@@ -34,7 +35,7 @@ export const LearningHome = () => {
                         key={index}
                         id={lessonPlan._id} 
                         title={lessonPlan.title}  
-                        lesson={lessonPlan.lesson}/>
+                        lessons={lessonPlan.sections}/>
                 )
             })}
             </div>

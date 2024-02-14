@@ -1,18 +1,20 @@
 import { NavBar } from "./NavBar";
 import { Login } from "./Login";
-import { Learning } from "./Learning";
+import { LearningPlan } from "./LearningPlan";
 import { LearningHome } from "./LearningHome"
 import { Signup } from "./Signup"
 import { HomePage } from "./HomePage"
 import { Account } from "./Account"
+import { Playground } from "./Playground"
 
 
 export { 
     NavBar,
     Login,
-    Learning,
+    LearningPlan,
     LearningHome,
     Signup,
     HomePage,
-    Account
+    Account,
+    Playground
 };
