@@ -55,7 +55,7 @@ export const LearningCard = ({ id, title, lesson }) => {
     }
 
     return (
-        <div className={`border border-gray-900 shadow-lg flex flex-col justify-center items-center transition-all duration-300 m-2 p-4 rounded `}>
+        <div className={`border border-gray-900 shadow-lg m-2 p-4 rounded `}>
             <div onClick={handleEditClick}>{(isEditing) ? <button onMouseDown={handleSave}>Save</button> : 'Edit'}</div>
             {(isEditing) && (
                 <button onMouseDown={handleCancel}>Cancel</button>

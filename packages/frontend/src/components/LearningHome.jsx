@@ -25,8 +25,9 @@ export const LearningHome = () => {
     console.log('LESSONS', lessons);
     return (
         <div>
-            <h1>Hi {user.username}, welcome to your learning plans</h1>
+            <h1>Hi {user.username}, welcome to your learning Journeys</h1>
             <a href="/learning/new">Create a new learning plan</a>
+            <div className="flex flex-col md:flex-row">
             {lessons.map((lessonPlan, index) => {
                 return(
                     <LearningCard 
@@ -36,6 +37,7 @@ export const LearningHome = () => {
                         lesson={lessonPlan.lesson}/>
                 )
             })}
+            </div>
         </div>
     );
 };

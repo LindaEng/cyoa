@@ -4,6 +4,7 @@ import isAuthenticated from '../middleware/isAuthenticated.js'
 const Router = express.Router()
 
 Router.post('/', isAuthenticated, postChat)
+// Router.post('/')
 
 
 export default Router

@@ -1,12 +1,13 @@
 import mongoose from 'mongoose'
+const Schema = mongoose.Schema
 
 const lessonPlan = new mongoose.Schema({
     title: {
         type: String,
         required: true
     },
-    lesson: {
-        type: String,
+    sections: {
+        type: [Schema.Types.Mixed],
         required: true
     },
     user: {
