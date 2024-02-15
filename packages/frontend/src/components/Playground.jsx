@@ -14,18 +14,36 @@ export const Playground = () => {
         height: window.innerHeight,
     });
 
-    const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
 
-    const initialNodes = [
-        { id: '1', position: { x: windowSize.width / 2, y: windowSize.height / 4 }, data: { label: '1' } },
-        { id: '2', position: { x: windowSize.width / 2, y: windowSize.height / 2 }, data: { label: '2' } },
-      ];
-
+    const [initialNodes, setInitialNodes] = useState([]);
+    const [initialEdges, setInitialEdges] = useState([]);
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [lesson, setLesson] = useState({})
 
     const {id} = useParams();
+
+    const createInitialNodes = (lesson) => {
+        const nodes = lesson.sections.map((section, index) => {
+            return {
+                id: index,
+                position: {x: windowSize.width / 2, y: windowSize.height / 4},
+                data: {label: section.broadTopic}
+            }
+        })
+        setInitialNodes(nodes);
+    }
+
+    const createInitalEdges = (lesson) => {
+        const edges = lesson.sections.map((session, index) => {
+            return {
+                id: `e${index}-${index + 1}`,
+                source: index,
+                target: index + 1
+            }
+        })
+        setInitialEdges(edges);
+    }
     
     const onConnect = useCallback(
         (params) => setEdges((eds) => addEdge(params, eds)),
@@ -54,7 +72,9 @@ export const Playground = () => {
         fetchLesson();
     },[])
 
-console.log("LESSON",lesson);
+  createInitialNodes(lesson);
+  createInitalEdges(lesson);
+
   return (
     <div className={`w-screen h-screen flex flex-col items-center`}>
         <h1>{lesson.title}</h1>
