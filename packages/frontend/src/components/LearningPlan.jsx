@@ -10,7 +10,8 @@ import remarkSlug from 'remark-slug';
 import { set } from 'mongoose';
 
 const markdown = `# Topic: Backpacking       
-Table of Contents:
+## Table of Contents:
+
 - [Introduction](#introduction)
 - [Choosing the Right Backpack](#choosing-the-right-backpack)
 - [Packing Essentials](#packing-essentials)
@@ -45,7 +46,7 @@ In this section, we will emphasize the importance of environmental stewardship a
 In this concluding section, we will summarize the key points covered in this lesson. We will emphasize the importance of responsible backpacking practices, which include being well-prepared, respecting nature, and ensuring our safety and the safety of others. Backpacking can be a rewarding and enriching experience, providing opportunities for adventure, self-sufficiency, and connecting with the natural world.`
 export const LearningPlan = () => {
     const [userMessage, setUserMessage] = useState('');
-    const [response, setResponse] = useState(`${markdown}`);
+    const [response, setResponse] = useState(``);
     const [loading, setIsLoading] = useState(false);
     const { user, isLoggedIn } = useContext(UserContext);
 
@@ -55,7 +56,6 @@ export const LearningPlan = () => {
         try {
             const res = await api.post('/api/chat',{ message: userMessage });
             console.log(res.data);
-            const lesson = learningPlanParse(res.data)
             setResponse(res.data);
             setIsLoading(false);
             // setResponse(lesson)            
@@ -65,32 +65,20 @@ export const LearningPlan = () => {
     };
 
     const handleSave = async (event) => {
-        console.log(learningPlanParse(response));
+        const saveLesson = learningPlanParse(response)
         event.preventDefault();
-        // if(!userMessage) return console.log("No message to save!")
-        // else {
-        //     const body = {title: response.title, sections: response.sections, user: user._id}
-        //     try {
-        //         const res = await api.post('/api/lessons', body);
-        //         console.log("Lesson saved!", res);
-        //     } catch (error) {
-        //         console.error(error)
-        //     }
-        // }
+        if(!userMessage) return console.log("No message to save!")
+        else {
+            const body = {title: saveLesson.title, sections: saveLesson.sections, user: user._id}
+            try {
+                const res = await api.post('/api/lessons', body);
+                console.log("Lesson saved!", res);
+            } catch (error) {
+                console.error(error)
+            }
+        }
     }    
-    // const makeList = (parsedStructure) => {
-    //     const title = <h1 className={`text-xl font-bold`}>{parsedStructure.title}</h1>;
-    //     const sections = parsedStructure.sections.map((section, index) => {
-    //         const broadTopic = <h3 className={`text-md`}>{section.broadTopic}</h3>;
-    //         const subtopics = section.subtopics.map((subtopic, subIndex) => <li className={`text-sm pl-1 list-disc`} key={subIndex}>{subtopic}</li>);
-    //         return <div key={index}>{broadTopic}<ul className={`pl-10`}>{subtopics}</ul></div>;
-    //     });
-    //     return (<div className={`pl-8 flex flex-col`}>
-    //         {title}<br/>
-    //         <div className={`relative sm:absolute top-0 right-0 m-8 border border-gray-900 p-2 text-xs rounded w-1/3`}>This is a sample learning plan. If it all looks good, hit the save button~!</div>
-    //         {sections}
-    //         </div>)
-    // }
+
 
     return (
         <div>

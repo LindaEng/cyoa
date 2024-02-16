@@ -16,16 +16,12 @@ export const learningPlanParse = (text) => {
 
 
     // Extract Table of Contents list
-    const contentsRegex = /Table of Contents:\s*(.+?)\s*##/s;
-    const contentsMatch = text.match(contentsRegex);
-    const filteredTOC = contentsMatch[0].split("\n").filter((item) => {
-        return item[0] === "-"
-    }).map((item) => {
-        const match = item.match(/\[([^\]]+)\]/); // Match the text inside square brackets
-        return match ? match[1] : item; // Return the matched text, or the original item if no match was found
-    }).slice(1, -1); // Remove the first and last items
-    
-    parsedStructure.sections = filteredTOC
+    const contentsRegex = /- \[(.*?)\]\(.*?\)/g;
+    let contentsMatch;
+
+    while ((contentsMatch = contentsRegex.exec(text)) !== null) {
+      parsedStructure.sections.push(contentsMatch[1]);
+    }
 
     console.log(parsedStructure);
     return parsedStructure;
