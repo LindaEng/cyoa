@@ -1,5 +1,5 @@
 import React from 'react'
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import {navLinks} from '../constants/links.js'
 import { api } from '../api/index.js'
 import { useContext } from 'react'

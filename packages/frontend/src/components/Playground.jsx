@@ -20,35 +20,25 @@ export const Playground = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [lesson, setLesson] = useState({})
+    
 
     const {id} = useParams();
 
-    const createInitialNodes = (lesson) => {
-        const nodes = lesson.sections.map((section, index) => {
-            return {
-                id: index,
-                position: {x: windowSize.width / 2, y: windowSize.height / 4},
-                data: {label: section.broadTopic}
-            }
-        })
-        setInitialNodes(nodes);
-    }
 
-    const createInitalEdges = (lesson) => {
-        const edges = lesson.sections.map((session, index) => {
-            return {
-                id: `e${index}-${index + 1}`,
-                source: index,
-                target: index + 1
+    useEffect(() => {
+        const fetchLesson = async () => {
+            try {
+                const res = await api.get(`/api/lessons/${id}`);
+        console.log("LESSON FROM PLAYGROUND", res.data);
+
+                setLesson(res.data);
+            } catch (error) {
+                console.error(error)
             }
-        })
-        setInitialEdges(edges);
-    }
-    
-    const onConnect = useCallback(
-        (params) => setEdges((eds) => addEdge(params, eds)),
-        [setEdges],
-      );
+        }
+        fetchLesson();
+    },[])
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -61,19 +51,48 @@ export const Playground = () => {
     },[])
 
     useEffect(() => {
-        const fetchLesson = async () => {
-            try {
-                const res = await api.get(`/api/lessons/${id}`);
-                setLesson(res.data);
-            } catch (error) {
-                console.error(error)
-            }
+        if (lesson) {
+            createInitialNodes(lesson);
+            createInitalEdges(lesson);
         }
-        fetchLesson();
-    },[])
+    }, [lesson]);
 
-  createInitialNodes(lesson);
-  createInitalEdges(lesson);
+    useEffect(() => {
+        setNodes(initialNodes);
+        setEdges(initialEdges);
+      }, [initialNodes, initialEdges]);
+
+    const createInitialNodes = (lesson) => {
+        const initialPosition = {x: windowSize.width / 2, y: windowSize.height / 4}
+        const nodes = lesson?.sections?.map((section, index) => {
+            return {
+                id: index.toString(),
+                position: {...initialPosition, y: initialPosition.y + index * 100},
+                data: {label: section}
+            }
+        }) || [];
+        setInitialNodes(nodes)
+        setNodes(nodes);
+    }
+    
+    const createInitalEdges = (lesson) => {
+        const edges = lesson?.sections?.map((session, index) => {
+            return {
+                id: `e${index}-${index + 1}`,
+                source: index.toString(),
+                target: (index + 1).toString(),
+            }
+        }) || [];
+        setInitialEdges(edges)
+        setEdges(edges);
+    }
+    
+    const onConnect = useCallback(
+        (params) => setEdges((eds) => addEdge(params, eds)),
+        [setEdges],
+      );
+
+    console.log('noddes ',nodes, edges);
 
   return (
     <div className={`w-screen h-screen flex flex-col items-center`}>
