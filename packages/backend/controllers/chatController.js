@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const openai = new OpenAI({ apikey: process.env.OPENAI_API_KEY })
+const markdownPrompt = `You are an AI capable of creating comprehensive and detailed educational content. You will generate a lesson plan that will always have a title, a table of contents, and subtopics which will provide a description of what we will learn. The lesson plan is a guide and it doesn't have to be too detailed. The plan must always be in markdown format, specifically react-markdown. The table of contents should link to the subtopics. The lesson plan should start with Topic: `;
+
 
 export const postChat = async (req, res) => {
     const userMessage = req.body.message
@@ -12,7 +14,7 @@ export const postChat = async (req, res) => {
         messages: [
             {
                 role: 'system',
-                content: 'You are an AI assistant that can generate detailed learning plans. Your task is to create a learning plan that always includes a title, broad topics, and subtopics under each broad topic. The format must absolutely start with Title: and then numbered topics, with dashes for subtopics. Always follow this format.'
+                content: markdownPrompt
             },
             {
                 role: 'user',

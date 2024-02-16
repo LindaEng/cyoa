@@ -7,29 +7,25 @@ export const learningPlanParse = (text) => {
     };
   
     // Regex to extract the title
-    const titleRegex = /Title:\s*(.+?)\s*1/;
+    const titleRegex = /# Topic:\s*(.+?)\s*\n/;
     const titleMatch = text.match(titleRegex);
     if (titleMatch) {
       parsedStructure.title = titleMatch[1].trim();
     }
 
 
-    // Split the text into sections based on numbered items
-    const sections = text.split(/\n(?=\d+)/);
-  
-    parsedStructure.sections = sections.map((section, idx) => {
-        // Split the section into lines
-        const lines = section.split("\n");
-        // The first line is the broad topic
-        const broadTopic = lines[0].trim();
-        // The rest of the lines are the subtopics
-        const subtopics = lines.slice(1).map((subtopic) => {
-            return subtopic.trim().replace(/- /, "")
-        }).filter((subtopic) => {
-            return subtopic !== "";
-        });
-        return { broadTopic, subtopics };
-    }).filter((section,idx) => idx !== 0)
+
+    // Extract Table of Contents list
+    const contentsRegex = /Table of Contents:\s*(.+?)\s*##/s;
+    const contentsMatch = text.match(contentsRegex);
+    const filteredTOC = contentsMatch[0].split("\n").filter((item) => {
+        return item[0] === "-"
+    }).map((item) => {
+        const match = item.match(/\[([^\]]+)\]/); // Match the text inside square brackets
+        return match ? match[1] : item; // Return the matched text, or the original item if no match was found
+    }).slice(1, -1); // Remove the first and last items
+    
+    parsedStructure.sections = filteredTOC
 
     console.log(parsedStructure);
     return parsedStructure;

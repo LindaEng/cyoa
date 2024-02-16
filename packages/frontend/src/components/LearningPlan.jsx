@@ -9,38 +9,43 @@ import remarkGfm from 'remark-gfm';
 import remarkSlug from 'remark-slug';
 import { set } from 'mongoose';
 
-const markdown = `# Lesson Plan: Introduction to Paper
+const markdown = `# Topic: Backpacking       
+Table of Contents:
+- [Introduction](#introduction)
+- [Choosing the Right Backpack](#choosing-the-right-backpack)
+- [Packing Essentials](#packing-essentials)
+- [Planning and Preparing](#planning-and-preparing)
+- [Navigation and Route Planning](#navigation-and-route-planning)
+- [Safety and Emergencies](#safety-and-emergencies)
+- [Leave No Trace Principles](#leave-no-trace-principles)
+- [Conclusion](#conclusion)
 
-## Table of Contents
-1. [Overview](#overview)
-2. [History of Paper](#history-of-paper)
-3. [Types of Paper](#types-of-paper)
-4. [Paper Production Process](#paper-production-process)
-5. [Environmental Impact of Paper](#environmental-impact-of-paper)
-6. [Conclusion](#conclusion)
+## Introduction
+In this lesson, we will explore the exciting world of backpacking. Backpacking is a form of outdoor recreation that involves carrying everything you need on your back and traveling through natural landscapes, typically for multiple days. This lesson will cover various aspects of backpacking, including choosing the right backpack, packing essentials, planning and preparing for a trip, navigation and route planning, safety and emergencies, and the importance of practicing Leave No Trace principles.
 
-## Overview {#overview}
-In this lesson, we will explore the fascinating world of paper. We will look at its history, different types, how it is produced, and its environmental impact. By the end of this lesson, you will have a comprehensive understanding of paper and its importance in our daily lives.
+## Choosing the Right Backpack
+In this section, we will learn about the different types and sizes of backpacks available for backpacking. We will discuss important factors to consider when choosing a backpack, such as capacity, fit, features, and materials.
 
-## History of Paper<a name="history-of-paper"></a>
-In this section, we will delve into the history of paper. We will learn about its origins, the development of papermaking techniques, and the impact of paper on human civilization.
+## Packing Essentials
+In this section, we will explore the essential items you should pack for a backpacking trip. We will cover the basics of clothing, shelter, sleeping gear, cooking equipment, food, water, and personal hygiene items. We will also discuss strategies for reducing pack weight and maximizing storage efficiency.
 
-## Types of Paper<a name="types-of-paper"></a>
-In this section, we will explore the various types of paper available today. We will learn about different paper grades, such as bond paper, newsprint, and cardstock. Additionally, we will discuss specialty papers, including parchment, rice paper, and handmade paper.
+## Planning and Preparing
+In this section, we will delve into the importance of planning and preparing for a backpacking trip. We will cover topics such as selecting a destination, researching the area, obtaining necessary permits, creating a trip itinerary, and gathering information about the local weather, wildlife, and regulations.
 
-## Paper Production Process<a name="paper-production-process"></a>
-In this section, we will examine the step-by-step process of paper production. We will explore each stage, from raw materials to the final product. Topics covered will include pulping, papermaking machines, and finishing processes.
+## Navigation and Route Planning
+In this section, we will learn about the importance of navigation skills and route planning in backpacking. We will discuss various tools and techniques for map reading, using a compass, and navigating with GPS devices. We will also explore how to plan a route, consider factors like distance, elevation gain, and terrain difficulty, and assess potential hazards and landmarks along the way.
 
-## Environmental Impact of Paper<a name="environmental-impact-of-paper"></a>
-In this section, we will discuss the environmental impact of paper production and consumption. We will analyze the deforestation and energy consumption associated with paper production, as well as recycling and sustainable forestry practices.
+## Safety and Emergencies
+In this section, we will focus on safety practices and preparation for emergencies while backpacking. We will cover important topics such as first aid, wildlife encounters, weather-related hazards, and emergency communication devices. We will also discuss strategies for minimizing risks and staying safe in wilderness settings.
 
-## Conclusion<a name="conclusion"></a>
-In the final section, we will summarize the key points covered in this lesson. We will recap the history and types of paper, the paper production process, and the environmental impact of paper. Additionally, we will discuss the importance of responsible paper usage and sustainable alternatives.
+## Leave No Trace Principles
+In this section, we will emphasize the importance of environmental stewardship and practicing Leave No Trace principles while backpacking. We will discuss the seven core principles, including minimizing campfire impacts, packing out trash, respecting wildlife, and leaving natural and cultural artifacts untouched. We will also explore strategies for minimizing our impact on the environment while enjoying outdoor activities.
 
-Feel free to explore each subtopic in more detail, ensuring a well-rounded understanding of paper and its significance in our society.`
+## Conclusion
+In this concluding section, we will summarize the key points covered in this lesson. We will emphasize the importance of responsible backpacking practices, which include being well-prepared, respecting nature, and ensuring our safety and the safety of others. Backpacking can be a rewarding and enriching experience, providing opportunities for adventure, self-sufficiency, and connecting with the natural world.`
 export const LearningPlan = () => {
     const [userMessage, setUserMessage] = useState('');
-    const [response, setResponse] = useState(``);
+    const [response, setResponse] = useState(`${markdown}`);
     const [loading, setIsLoading] = useState(false);
     const { user, isLoggedIn } = useContext(UserContext);
 
@@ -50,7 +55,7 @@ export const LearningPlan = () => {
         try {
             const res = await api.post('/api/chat',{ message: userMessage });
             console.log(res.data);
-            // const lesson = learningPlanParse(res.data)
+            const lesson = learningPlanParse(res.data)
             setResponse(res.data);
             setIsLoading(false);
             // setResponse(lesson)            
@@ -60,7 +65,7 @@ export const LearningPlan = () => {
     };
 
     const handleSave = async (event) => {
-        console.log(response);
+        console.log(learningPlanParse(response));
         event.preventDefault();
         // if(!userMessage) return console.log("No message to save!")
         // else {
