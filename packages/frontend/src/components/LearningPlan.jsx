@@ -69,7 +69,7 @@ export const LearningPlan = () => {
         event.preventDefault();
         if(!userMessage) return console.log("No message to save!")
         else {
-            const body = {title: saveLesson.title, sections: saveLesson.sections, user: user._id}
+            const body = {title: saveLesson.title, sections: saveLesson.sections, lessonPlan:response, user: user._id}
             try {
                 const res = await api.post('/api/lessons', body);
                 console.log("Lesson saved!", res);

@@ -28,7 +28,8 @@ export const LearningHome = () => {
     return (
         <div>
             <h1>Hi {user.username}, welcome to your learning Journeys</h1>
-            <a href="/learning/new">Create a new learning plan</a>
+            <Link to="/learning/new">Create a new learning plan</Link>
+            <h2 className={`text-green-500`}>Your learning plans: </h2>
             <div className="flex flex-col md:flex-row">
             {lessons.map((lessonPlan, index) => {
                 return(

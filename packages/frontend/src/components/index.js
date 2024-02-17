@@ -5,7 +5,7 @@ import { LearningHome } from "./LearningHome"
 import { Signup } from "./Signup"
 import { HomePage } from "./HomePage"
 import { Account } from "./Account"
-import { Playground } from "./Playground"
+import { Playground } from "./Playgrond/Playground"
 
 
 export { 

@@ -1,11 +1,29 @@
 import React, {useCallback} from 'react';
 import { useEffect, useState } from 'react'
-import { api } from "../api"
-import { UserContext } from '../contexts/UserContext.jsx';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkSlug from 'remark-slug';
+import { api } from "../../api/index.js"
+import { UserContext } from '../../contexts/UserContext.jsx';
 import ReactFlow, { MiniMap, Controls, Background, useNodesState, useEdgesState, addEdge } from 'reactflow';
 import { useParams } from 'react-router-dom';
+import { Drawer } from '../Playgrond/Drawer.jsx';
  
 import 'reactflow/dist/style.css';
+
+const customComponent = (lessonPlan) => {
+    return (
+        <>
+            <Drawer />
+            <Markdown 
+                className={`prose lg:prose-xl text-sm w-full`}
+                remarkPlugins={[remarkGfm, [remarkSlug, {slugify: s => s.toLowerCase()}]]} 
+            >
+                {lessonPlan}
+            </Markdown>    
+        </>
+    )
+}
  
  
 export const Playground = () => {
@@ -52,47 +70,40 @@ export const Playground = () => {
 
     useEffect(() => {
         if (lesson) {
-            createInitialNodes(lesson);
-            createInitalEdges(lesson);
+                const initialPosition = {x: windowSize.width / 2, y: windowSize.height / 4}
+                const nodes = lesson?.sections?.map((section, index) => {
+                    return {
+                        id: index.toString(),
+                        position: {...initialPosition, y: initialPosition.y + index * 100},
+                        data: {label: section.title}
+                    }
+                }) || [];
+                setNodes(nodes);
+            
+                const edges = lesson?.sections?.map((session, index) => {
+                    return {
+                        id: `e${index}-${index + 1}`,
+                        source: index.toString(),
+                        target: (index + 1).toString(),
+                    }
+                }) || [];
+                setEdges(edges);
+                console.log(lesson.lessonPlan);
+
+                const separateNode = {
+                    id: 'lesson-plan',
+                    position: {x: initialPosition.x + 50, y: initialPosition.y},
+                    data: {label: customComponent(lesson.lessonPlan)}
+                }
+                setNodes([...nodes, separateNode]);
         }
     }, [lesson]);
 
-    useEffect(() => {
-        setNodes(initialNodes);
-        setEdges(initialEdges);
-      }, [initialNodes, initialEdges]);
-
-    const createInitialNodes = (lesson) => {
-        const initialPosition = {x: windowSize.width / 2, y: windowSize.height / 4}
-        const nodes = lesson?.sections?.map((section, index) => {
-            return {
-                id: index.toString(),
-                position: {...initialPosition, y: initialPosition.y + index * 100},
-                data: {label: section}
-            }
-        }) || [];
-        setInitialNodes(nodes)
-        setNodes(nodes);
-    }
-    
-    const createInitalEdges = (lesson) => {
-        const edges = lesson?.sections?.map((session, index) => {
-            return {
-                id: `e${index}-${index + 1}`,
-                source: index.toString(),
-                target: (index + 1).toString(),
-            }
-        }) || [];
-        setInitialEdges(edges)
-        setEdges(edges);
-    }
-    
     const onConnect = useCallback(
         (params) => setEdges((eds) => addEdge(params, eds)),
         [setEdges],
       );
 
-    console.log('noddes ',nodes, edges);
 
   return (
     <div className={`w-screen h-screen flex flex-col items-center`}>

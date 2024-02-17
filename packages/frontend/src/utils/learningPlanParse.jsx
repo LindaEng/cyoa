@@ -20,7 +20,12 @@ export const learningPlanParse = (text) => {
     let contentsMatch;
 
     while ((contentsMatch = contentsRegex.exec(text)) !== null) {
-      parsedStructure.sections.push(contentsMatch[1]);
+      parsedStructure.sections.push({
+        title: contentsMatch[1],
+        content: {},
+        completed: false,
+        score: 0
+        });
     }
 
     console.log(parsedStructure);

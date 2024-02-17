@@ -27,7 +27,7 @@ export const NavBar = () => {
             {navLinks.map((link, index) => {
                 if(isLoggedIn && link.requiresLogin || link.name === "Home") {
                     return (
-                        <a key={index} href={link.path}>{link.name}</a>
+                        <a className={`m-3`} key={index} href={link.path}>{link.name}</a>
                     )
                 }
                 if(!isLoggedIn && !link.requiresLogin) {
