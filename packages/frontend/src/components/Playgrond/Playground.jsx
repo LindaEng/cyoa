@@ -38,6 +38,7 @@ export const Playground = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [lesson, setLesson] = useState({})
+    const [isOpen, setIsOpen] = useState(false);
     
 
     const {id} = useParams();
@@ -89,13 +90,6 @@ export const Playground = () => {
                 }) || [];
                 setEdges(edges);
                 console.log(lesson.lessonPlan);
-
-                const separateNode = {
-                    id: 'lesson-plan',
-                    position: {x: initialPosition.x + 50, y: initialPosition.y},
-                    data: {label: customComponent(lesson.lessonPlan)}
-                }
-                setNodes([...nodes, separateNode]);
         }
     }, [lesson]);
 
@@ -106,7 +100,19 @@ export const Playground = () => {
 
 
   return (
-    <div className={`w-screen h-screen flex flex-col items-center`}>
+    <div className={`relative w-screen h-screen flex flex-col items-center`}>
+        <button
+            className={`bg-blue-500 text-white px-4 py-2 rounded`} 
+            onClick={() => setIsOpen(!isOpen)}>Open Drawer</button>
+            {isOpen && (
+                <div className={`absolute top-0 left-0 w-64 bg-gray-100 h-screen p-4 overflow-auto z-10`}>
+                    <Markdown
+                        className={`prose lg:prose-xl text-sm w-full`}
+                        remarkPlugins={[remarkGfm, [remarkSlug, {slugify: s => s.toLowerCase()}]]}
+                    >{lesson.lessonPlan}</Markdown>
+
+                </div>
+            )}
         <h1>{lesson.title}</h1>
         <ReactFlow 
             nodes={nodes} 
