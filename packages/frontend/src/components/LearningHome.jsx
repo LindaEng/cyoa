@@ -33,10 +33,11 @@ export const LearningHome = () => {
             <div className="flex flex-col md:flex-row">
             {lessons.map((lessonPlan, index) => {
                 return(
-                    <Link to={`/playground/${lessonPlan._id}`}>
+                    <Link to={`/playground/${user._id}/${lessonPlan._id}`}>
                         <LearningCard 
                             key={index}
-                            id={lessonPlan._id} 
+                            userId={user._id}
+                            lessonId={lessonPlan._id} 
                             title={lessonPlan.title}  
                             lessons={lessonPlan.sections}/>
                     </Link>
