@@ -30,20 +30,23 @@ export const LearningHome = () => {
             <h1>Hi {user.username}, welcome to your learning Journeys</h1>
             <Link to="/learning/new">Create a new learning plan</Link>
             <h2 className={`text-green-500`}>Your learning plans: </h2>
-            <div className="flex flex-col md:flex-row">
+            
             {lessons.map((lessonPlan, index) => {
                 return(
+                    <div key={index} className="flex flex-col md:flex-row">
                     <Link to={`/playground/${user._id}/${lessonPlan._id}`}>
-                        <LearningCard 
+                        <LearningCard
+                            id={index} 
                             key={index}
                             userId={user._id}
                             lessonId={lessonPlan._id} 
                             title={lessonPlan.title}  
-                            lessons={lessonPlan.sections}/>
+                            lessons={lessonPlan.sections}
+                        />
                     </Link>
+                </div>
                 )
             })}
-            </div>
         </div>
     );
 };

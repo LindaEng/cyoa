@@ -55,10 +55,10 @@ const updateLesson = async (req, res) => {
 
 const deleteLesson = async (req, res) => {
     try {
-        const userId = req.params.id
+        const userId = req.params.userId
         const lessonId = req.params.lessonId
         await LessonPlan.deleteOne({ _id: lessonId, user: userId });
-        await User.updateOne({ _id: userId }, { $pull: { lessons: lessonId } });
+        await User.updateOne({ _id: userId }, { $pull: { lessonPlans: lessonId } });
         res.status(200).json({message: "Lesson deleted successfully"})
 
     } catch (error) {

@@ -45,6 +45,7 @@ In this section, we will emphasize the importance of environmental stewardship a
 
 ## Conclusion
 In this concluding section, we will summarize the key points covered in this lesson. We will emphasize the importance of responsible backpacking practices, which include being well-prepared, respecting nature, and ensuring our safety and the safety of others. Backpacking can be a rewarding and enriching experience, providing opportunities for adventure, self-sufficiency, and connecting with the natural world.`
+
 export const LearningPlan = () => {
     const [userMessage, setUserMessage] = useState('');
     const [response, setResponse] = useState(``);

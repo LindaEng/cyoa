@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { api } from '../../api/index.js'
 
 export const Modal = ({handleModalClose, title, sectionInfo}) => {
     const [isMaximized, setIsMaximized] = useState(false);
+    const [difficulty, setDifficulty] = useState('');
+    const [sections, setSections] = useState([{}]);
 
     const handleMaximize = () => {
         setIsMaximized(!isMaximized);
