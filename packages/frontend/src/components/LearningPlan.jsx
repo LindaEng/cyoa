@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Markdown from 'react-markdown';
 import { api } from "../api/index.js"
 import { UserContext } from '../contexts/UserContext.jsx';
@@ -49,6 +50,7 @@ export const LearningPlan = () => {
     const [response, setResponse] = useState(``);
     const [loading, setIsLoading] = useState(false);
     const { user, isLoggedIn } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -72,7 +74,7 @@ export const LearningPlan = () => {
             const body = {title: saveLesson.title, sections: saveLesson.sections, lessonPlan:response, user: user._id}
             try {
                 const res = await api.post('/api/lessons', body);
-                console.log("Lesson saved!", res);
+                navigate(`/learning`)
             } catch (error) {
                 console.error(error)
             }

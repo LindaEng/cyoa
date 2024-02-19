@@ -1,6 +1,7 @@
 import React, {useCallback} from 'react';
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { ResizableBox } from 'react-resizable';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkSlug from 'remark-slug';
@@ -14,6 +15,8 @@ import { Modal } from '../Playgrond/Modal.jsx';
  
 import 'reactflow/dist/style.css';
 import { set } from 'mongoose';
+
+
 
 const customComponent = (lessonPlan) => {
     return (
@@ -82,7 +85,7 @@ export const Playground = () => {
                     return {
                         id: index.toString(),
                         position: {...initialPosition, y: initialPosition.y + index * 100},
-                        data: {label: section.title}
+                        data: {label: section.title},
                     }
                 }) || [];
                 setNodes(nodes);
@@ -165,13 +168,15 @@ export const Playground = () => {
                 />
             )}
             {isOpen && (
-                <div className={`absolute top-0 left-0 w-64 bg-gray-100 h-screen p-4 overflow-auto z-10`}>
+
+                <div className={`absolute top-0 left-0 w-63 bg-gray-100 h-screen p-4 overflow-auto z-10`}>
                     <Markdown
                         className={`prose lg:prose-xl text-sm w-full`}
                         remarkPlugins={[remarkGfm, [remarkSlug, {slugify: s => s.toLowerCase()}]]}
                     >{lesson.lessonPlan}</Markdown>
 
                 </div>
+
             )}
         <h1>{lesson.title}</h1>
         <ReactFlow 
