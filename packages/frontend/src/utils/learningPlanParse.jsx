@@ -31,5 +31,10 @@ export const learningPlanParse = (text) => {
     console.log(parsedStructure);
     return parsedStructure;
 }
-  
+
+export const learningPlanIsolateSection = (lesson, text) => {
+    const section = lesson.split('##').filter((section) => section.includes(text) && !section.includes('Table of Contents'))[0].split('\n').slice(1).join('\n');
+    console.log("SECTIONNNN ", section);
+    return section
+}    
 

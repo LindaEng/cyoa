@@ -6,12 +6,14 @@ import remarkGfm from 'remark-gfm';
 import remarkSlug from 'remark-slug';
 import { api } from "../../api/index.js"
 import { UserContext } from '../../contexts/UserContext.jsx';
+import { learningPlanIsolateSection } from '../../utils/learningPlanParse.jsx'
 import ReactFlow, { MiniMap, Controls, Background, useNodesState, useEdgesState, addEdge } from 'reactflow';
 import { useParams } from 'react-router-dom';
 import { Drawer } from '../Playgrond/Drawer.jsx';
 import { Modal } from '../Playgrond/Modal.jsx';
  
 import 'reactflow/dist/style.css';
+import { set } from 'mongoose';
 
 const customComponent = (lessonPlan) => {
     return (
@@ -43,17 +45,16 @@ export const Playground = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [onHover, setOnHover] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [nodeData, setNodeData] = useState({});
     const navigate = useNavigate();
 
     const {userId, lessonId} = useParams();
 
-
+    //Get lesson plan and set it to lesson state
     useEffect(() => {
         const fetchLesson = async () => {
             try {
                 const res = await api.get(`/api/lessons/${lessonId}`);
-        console.log("LESSON FROM PLAYGROUND", res.data);
-
                 setLesson(res.data);
             } catch (error) {
                 console.error(error)
@@ -62,6 +63,7 @@ export const Playground = () => {
         fetchLesson();
     },[])
 
+    //Set window size to state
     useEffect(() => {
         const handleResize = () => {
             setWindowSize({width: window.innerWidth, height: window.innerHeight})
@@ -72,6 +74,7 @@ export const Playground = () => {
         }
     },[])
 
+    //Set nodes and edges to state
     useEffect(() => {
         if (lesson) {
                 const initialPosition = {x: windowSize.width / 2, y: windowSize.height / 4}
@@ -92,7 +95,6 @@ export const Playground = () => {
                     }
                 }) || [];
                 setEdges(edges);
-                console.log(lesson.lessonPlan);
         }
     }, [lesson]);
 
@@ -101,9 +103,21 @@ export const Playground = () => {
         [setEdges],
       );
 
-    const handleModal = (e, element) => {
-        console.log("Element", element.data);
-        setModalIsOpen(!modalIsOpen);
+    const handleModalOpen = (e, element) => {
+        const nameOfLesson = element.data.label
+        const lessonPlan = lesson.lessonPlan
+        updateNodeData(lessonPlan, nameOfLesson);
+        setModalIsOpen(true);
+    }
+
+    const handleModalClose = () => {
+        setModalIsOpen(false);
+        setNodeData({});
+    }
+
+    const updateNodeData = (lessonPlan, section) => {
+        const sectionInfo = learningPlanIsolateSection(lessonPlan, section)
+        setNodeData({section, sectionInfo});
     }
 
     const handleDelete = async () => {
@@ -129,21 +143,27 @@ export const Playground = () => {
         return buttonText;
     }
 
-
   return (
     <div className={`relative w-screen h-screen flex flex-col items-center`}>
         
         <button
-            className={`absolute top-10 right-0 bg-blue-500 text-white px-4 py-2 rounded transition-all ${isOpen || onHover ? 'w-48' : 'w-15'} z-10`}
             onClick={() => setIsOpen(!isOpen)}
             onMouseEnter={() => setOnHover(true)}
             onMouseLeave={() => setOnHover(false)}
+            className={`absolute top-10 right-0 bg-blue-500 text-white px-4 py-2 rounded transition-all ${isOpen || onHover ? 'w-48' : 'w-15'} z-10`}
             >
             {buttonText(isOpen, onHover)}
         </button>
         <button 
             className={`color-red-300`}
             onClick={handleDelete}>Delete plan</button>
+            {modalIsOpen && nodeData && (
+                <Modal
+                    handleModalClose={handleModalClose}
+                    title={nodeData.section}
+                    sectionInfo={nodeData.sectionInfo}
+                />
+            )}
             {isOpen && (
                 <div className={`absolute top-0 left-0 w-64 bg-gray-100 h-screen p-4 overflow-auto z-10`}>
                     <Markdown
@@ -160,7 +180,7 @@ export const Playground = () => {
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
-            onNodeDoubleClick={handleModal}>
+            onNodeDoubleClick={handleModalOpen}>
             <Controls />
             <MiniMap />
             <Background variant='dots' gap={12} size={1}/>
