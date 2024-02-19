@@ -109,7 +109,7 @@ export const Playground = () => {
     const handleModalOpen = (e, element) => {
         const nameOfLesson = element.data.label
         const lessonPlan = lesson.lessonPlan
-        updateNodeData(lessonPlan, nameOfLesson);
+        updateNodeData(lesson, lessonPlan, nameOfLesson);
         setModalIsOpen(true);
     }
 
@@ -118,9 +118,10 @@ export const Playground = () => {
         setNodeData({});
     }
 
-    const updateNodeData = (lessonPlan, section) => {
+    const updateNodeData = (fullLesson, lessonPlan, section) => {
         const sectionInfo = learningPlanIsolateSection(lessonPlan, section)
-        setNodeData({section, sectionInfo});
+        const targetNode = fullLesson.sections.find((node) => node.title === section);
+        setNodeData({section, sectionInfo, lessonId: fullLesson._id, targetNode});
     }
 
     const handleDelete = async () => {
@@ -165,6 +166,7 @@ export const Playground = () => {
                     handleModalClose={handleModalClose}
                     title={nodeData.section}
                     sectionInfo={nodeData.sectionInfo}
+                    nodeData={nodeData}
                 />
             )}
             {isOpen && (
