@@ -48,7 +48,7 @@ In this concluding section, we will summarize the key points covered in this les
 
 export const LearningPlan = () => {
     const [userMessage, setUserMessage] = useState('');
-    const [response, setResponse] = useState(`${markdown}`);
+    const [response, setResponse] = useState(``);
     const [loading, setIsLoading] = useState(false);
     const { user, isLoggedIn } = useContext(UserContext);
     const navigate = useNavigate();
