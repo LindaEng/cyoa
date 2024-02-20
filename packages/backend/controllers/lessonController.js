@@ -53,6 +53,30 @@ const updateLesson = async (req, res) => {
     }
 }
 
+const updateSection = async (req, res) => {
+    try {
+        const { lessonId, sectionTitle } = req.params
+        console.log("UPDATE SECtiON ROUTE", lessonId, sectionTitle);
+        const updatedSection = req.body
+
+        let updateQuery = {}
+        for(let key in updatedSection) {
+            updateQuery[`sections.$[elem].${key}`] = updatedSection[key]
+        }
+
+        await LessonPlan.updateOne(
+            { _id: lessonId },
+            { $set: updateQuery },
+            { arrayFilters: [{"elem.title": sectionTitle}] }
+        )
+
+        res.status(200).json({message: "Section updated successfully"})
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message: "Error updating section"})
+    }
+}
+
 const deleteLesson = async (req, res) => {
     try {
         const userId = req.params.userId
@@ -67,4 +91,4 @@ const deleteLesson = async (req, res) => {
     }
 }
 
-export { getLessons, getLessonById, createLesson, updateLesson, deleteLesson }
+export { getLessons, getLessonById, createLesson, updateLesson, updateSection, deleteLesson }

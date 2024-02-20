@@ -48,7 +48,7 @@ In this concluding section, we will summarize the key points covered in this les
 
 export const LearningPlan = () => {
     const [userMessage, setUserMessage] = useState('');
-    const [response, setResponse] = useState(``);
+    const [response, setResponse] = useState(`${markdown}`);
     const [loading, setIsLoading] = useState(false);
     const { user, isLoggedIn } = useContext(UserContext);
     const navigate = useNavigate();
@@ -70,8 +70,8 @@ export const LearningPlan = () => {
     const handleSave = async (event) => {
         const saveLesson = learningPlanParse(response)
         event.preventDefault();
-        if(!userMessage) return console.log("No message to save!")
-        else {
+        // if(!userMessage) return console.log("No message to save!")
+        // else {
             const body = {title: saveLesson.title, sections: saveLesson.sections, lessonPlan:response, user: user._id}
             try {
                 const res = await api.post('/api/lessons', body);
@@ -79,7 +79,7 @@ export const LearningPlan = () => {
             } catch (error) {
                 console.error(error)
             }
-        }
+        // }
     }    
 
 

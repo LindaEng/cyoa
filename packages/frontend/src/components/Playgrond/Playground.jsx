@@ -167,6 +167,7 @@ export const Playground = () => {
                     title={nodeData.section}
                     sectionInfo={nodeData.sectionInfo}
                     nodeData={nodeData}
+                    lesson={lesson.lessonPlan}
                 />
             )}
             {isOpen && (

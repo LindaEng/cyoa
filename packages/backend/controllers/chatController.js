@@ -28,7 +28,8 @@ Discover some intriguing facts about asteroids, including their impact on Earth,
 ## Impact and Importance
 Understand the significance of studying asteroids, including their potential impact on Earth, their role in the formation of planets, and their importance in providing insights into the history of our solar system.`;
 
-const sectionPrompt = `You are an AI that will take a lesson plan to use as context, and the section title and content to generate new sections to fill in the lesson. The input will also contain a string that will represent the user's current level of understanding of the content. The response difficulty should be based on the user's level of understanding. The response should be in markdown format`
+const sectionPrompt = `You are an AI that will take a lesson plan to use as context, and the section title and content to generate new sections to fill in the lesson. Make sure to include examples and explanations to make the content comprehensive.
+The response should be in markdown format`
 
 
 export const postChat = async (req, res) => {
@@ -53,7 +54,9 @@ export const postChat = async (req, res) => {
 }
 
 export const postSectionChat = async (req, res) => {
-    const userMessage = req.body.message
+    const {sectionInfo, section } = req.body
+    const userMessage =`I want to add content to this section: ${section} with context from ${sectionInfo}. Please explain the concepts and provide examples to make the content comprehensive. I am looking for a detailed explanation in markdown format.`
+    
     const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
         messages: [
@@ -65,7 +68,7 @@ export const postSectionChat = async (req, res) => {
                 role: 'user',
                 content: userMessage
             }
-        ]
+        ],
 
     }) 
     console.log(response['usage']['total_tokens']);

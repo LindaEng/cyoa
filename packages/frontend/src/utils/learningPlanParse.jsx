@@ -24,7 +24,9 @@ export const learningPlanParse = (text) => {
         title: contentsMatch[1],
         content: {},
         completed: false,
-        score: 0
+        score: 0,
+        pages: {},
+        started: false
         });
     }
 
