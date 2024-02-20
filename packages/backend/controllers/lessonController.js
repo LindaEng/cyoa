@@ -77,6 +77,31 @@ const updateSection = async (req, res) => {
     }
 }
 
+const updatePage = async (req, res) => {
+    try {
+        const { lessonId, sectionTitle, pageId } = req.params
+        const updatedPage = req.body
+
+        let updateQuery = {}
+        for(let key in updatedPage) {
+            updateQuery[`sections.$[elem].pages.$[page].${key}`] = updatedPage[key]
+        }
+
+        console.log("UPDATE  PAGEEEE ", updateQuery);
+
+        await LessonPlan.updateOne(
+            { _id: lessonId },
+            { $set: updateQuery },
+            { arrayFilters: [{"elem.title": sectionTitle}, {"page._id": pageId}] }
+        )
+
+        res.status(200).json({message: "Page updated successfully"})
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message: "Error updating page"})
+    }
+}
+
 const deleteLesson = async (req, res) => {
     try {
         const userId = req.params.userId
@@ -91,4 +116,4 @@ const deleteLesson = async (req, res) => {
     }
 }
 
-export { getLessons, getLessonById, createLesson, updateLesson, updateSection, deleteLesson }
+export { getLessons, getLessonById, createLesson, updateLesson, updatePage, updateSection, deleteLesson }

@@ -11,9 +11,7 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
     const [currentSection, setCurrentSection] = useState(``);
     const [isUpdating, setIsUpdating] = useState(false);
     const [started, setStarted] = useState(nodeData.targetNode.started);
-
-
-    let score = nodeData.targetNode.score
+    const [score, setScore] = useState(nodeData.targetNode.score);
 
     console.log(nodeData.targetNode);
 
@@ -25,7 +23,7 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
         setCurrentPage(currentPage - 1);
     }
     const handleNextPage = () => {
-        const content = nodeData.targetNode.pages[nodeData.targetNode.pages.length - 1].content
+        const content = nodeData.targetNode.pages[currentPage].content
         setCurrentSection(content);
         setCurrentPage(currentPage + 1);
     }
@@ -45,6 +43,11 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
         } catch (error) {
             console.error(error);
         }
+    }
+
+    const handleScore = (score, total) => {
+        const newScore = Math.round((score / total) * 100);
+        setScore(newScore);
     }
 
     return (
@@ -77,6 +80,9 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
             (<Page
                 handleBackPage={handleBackPage}
                 currentSection={currentSection}
+                handleScore={handleScore}
+                nodeData={nodeData}
+                currentPage={currentPage}
             />)}
         </div>
         </Draggable>        
