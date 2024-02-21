@@ -3,21 +3,55 @@ import { api } from '../../api/index.js'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkSlug from 'remark-slug'
+import { updateEdge } from 'reactflow'
 
 
 export const Page = ({handleBackPage, currentSection, currentPage, handleScore, nodeData}) => {   
     const [checkedItems, setCheckedItems] = useState({});
+    const [saved, setSaved] = useState(false);
     let paragraphCounter = 0
+
+    useEffect(() => {
+        const fetchScore = async () => {
+            try {
+                const score = nodeData.targetNode.pages[currentPage - 1].score
+                // Initialize the checkedItems state based on the score
+                const checkedItems = {};
+                for (let i = 0; i < score; i++) {
+                    checkedItems[i] = true;
+                }
+                setCheckedItems(checkedItems);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchScore();
+    }, []);
+
+
 
     const handleSave = async () => {
         try {
-            await api.put(`/api/lessons/${nodeData.lessonId}/sections/${nodeData.section}/pages/${currentPage}`, {
-                completed: paragraphCounter === checkedItems, 
-                score: Math.round((checkedItems / paragraphCounter) * 100)
+            const score = calculateScore(checkedItems);
+            const res = await api.put(`/api/lessons/${nodeData.lessonId}/sections/${nodeData.section}/pages/${currentPage}`, {
+                completed: score === 100 ? true : false, 
+                score: score
             })
+            console.log(res);
+            const updateScore = await api.put(`/api/lessons/${nodeData.lessonId}/sections/${nodeData.section}`, {score: score});
+            console.log("Updated Score!", updateScore);
         } catch (error) {
             console.error(error);
         }
+    }
+
+    const calculateScore = (items) => {
+        let score = 0;
+        for (const item in checkedItems) {
+            if (item) score++;
+        }
+        score = Math.round((score / paragraphCounter) * 100);
+        return score;
     }
 
     const handleCheckboxChange = (event) => {
@@ -49,10 +83,13 @@ export const Page = ({handleBackPage, currentSection, currentPage, handleScore, 
                 },
             }} 
             >{currentSection}</Markdown>
-            <button className={`mt-4 pl-4 pr-4 bg-blue-400 text-white rounded`} onClick={()=> {
+            <button className={`mt-4 pl-4 pr-4 bg-blue-600 text-white rounded`} onClick={()=> {
                 handleBackPage()
-                handleScore()
-                }}>Back</button>           
+                handleScore(calculateScore(checkedItems))
+                }}>Back</button>   
+            <button className={`mt-4 pl-4 pr-4 bg-green-600 text-white rounded`} onClick={()=> {
+                handleSave()
+                 }}>Save</button>        
         </div>
     )
 }

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { api } from '../../api/index.js'
 import { ProgressRadialChart } from './ProgressRadialChart.jsx';
+import { LessonContext } from '../../contexts/LessonContext.jsx';
 import { Page } from './Page.jsx';
-import { set } from 'mongoose';
 import Draggable from 'react-draggable';
 
 export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) => {    
@@ -45,9 +45,9 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
         }
     }
 
-    const handleScore = (score, total) => {
-        const newScore = Math.round((score / total) * 100);
-        setScore(newScore);
+    const handleScore = (score) => {
+        console.log("handle score from Modal ",score)
+        setScore(score);
     }
 
     return (

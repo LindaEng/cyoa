@@ -5,5 +5,9 @@ export const LessonContext = createContext();
 
 export const LessonProvider = ({ children }) => {
     const [lessons, setLessons] = useState([{}]);
-    const 
+    const [currentLesson, setCurrentLesson] = useState({});
+
+    // useEffect() => {
+
+    // }
 }

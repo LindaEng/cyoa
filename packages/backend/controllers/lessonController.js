@@ -82,18 +82,22 @@ const updatePage = async (req, res) => {
         const { lessonId, sectionTitle, pageId } = req.params
         const updatedPage = req.body
 
-        let updateQuery = {}
+        // Find the lesson plan
+        const lessonPlan = await LessonPlan.findById(lessonId)
+
+        // Find the correct section
+        const section = lessonPlan.sections.find(section => section.title === sectionTitle)
+
+        // Find the correct page within the section
+        const page = section.pages.find(page => page.page === parseInt(pageId))
+
+        // Update the page
         for(let key in updatedPage) {
-            updateQuery[`sections.$[elem].pages.$[page].${key}`] = updatedPage[key]
+            page[key] = updatedPage[key]
         }
 
-        console.log("UPDATE  PAGEEEE ", updateQuery);
-
-        await LessonPlan.updateOne(
-            { _id: lessonId },
-            { $set: updateQuery },
-            { arrayFilters: [{"elem.title": sectionTitle}, {"page._id": pageId}] }
-        )
+        // Save the updated lesson plan
+        await lessonPlan.save()
 
         res.status(200).json({message: "Page updated successfully"})
     } catch (error) {
