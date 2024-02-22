@@ -9,8 +9,8 @@ Router.get('/', isAuthenticated, getLessons)
 Router.get('/:id', isAuthenticated, getLessonById)
 Router.post('/', isAuthenticated, createLesson)
 Router.put('/:userId/:id', isAuthenticated, updateLesson)
-Router.put('/:lessonId/sections/:sectionTitle', isAuthenticated, updateSection)
 Router.put('/:lessonId/sections/:sectionTitle/pages/:pageId', isAuthenticated, updatePage)
+Router.put('/:lessonId/sections/:sectionTitle', isAuthenticated, updateSection)
 Router.delete('/:userId/:lessonId', isAuthenticated, deleteLesson)
 
 

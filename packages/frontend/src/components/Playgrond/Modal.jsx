@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { api } from '../../api/index.js'
 import { ProgressRadialChart } from './ProgressRadialChart.jsx';
 import { LessonContext } from '../../contexts/LessonContext.jsx';
@@ -13,7 +13,6 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
     const [started, setStarted] = useState(nodeData.targetNode.started);
     const [score, setScore] = useState(nodeData.targetNode.score);
 
-    console.log(nodeData.targetNode);
 
     const handleMaximize = () => {
         setIsMaximized(!isMaximized);
@@ -30,6 +29,7 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
 
     const handleStartSection = async () => { 
         try {
+            console.log("Starting Section");
             setIsUpdating(true);
             const updateContentRes = await api.post(`/api/chat/section`, { sectionInfo: sectionInfo, section: title})
 
@@ -83,6 +83,7 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
                 handleScore={handleScore}
                 nodeData={nodeData}
                 currentPage={currentPage}
+                checkedItemsMap={(nodeData.targetNode.pages.find(page => page.page === currentPage)?.checkedItems ?? {})}
             />)}
         </div>
         </Draggable>        

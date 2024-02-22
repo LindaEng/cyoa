@@ -86,15 +86,20 @@ const updatePage = async (req, res) => {
         const lessonPlan = await LessonPlan.findById(lessonId)
 
         // Find the correct section
-        const section = lessonPlan.sections.find(section => section.title === sectionTitle)
+        const sectionIndex = lessonPlan.sections.findIndex(section => section.title === sectionTitle)
 
         // Find the correct page within the section
-        const page = section.pages.find(page => page.page === parseInt(pageId))
+        const pageIndex = lessonPlan.sections[sectionIndex].pages.findIndex(page => page.page === parseInt(pageId))
 
         // Update the page
         for(let key in updatedPage) {
-            page[key] = updatedPage[key]
+            lessonPlan.sections[sectionIndex].pages[pageIndex][key] = updatedPage[key]
         }
+
+        console.log("update page page", lessonPlan.sections[sectionIndex].pages[pageIndex]);
+
+        // Mark the pages field as modified
+        lessonPlan.markModified(`sections.${sectionIndex}.pages`);
 
         // Save the updated lesson plan
         await lessonPlan.save()

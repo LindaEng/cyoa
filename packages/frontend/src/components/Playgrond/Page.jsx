@@ -6,26 +6,20 @@ import remarkSlug from 'remark-slug'
 import { updateEdge } from 'reactflow'
 
 
-export const Page = ({handleBackPage, currentSection, currentPage, handleScore, nodeData}) => {   
-    const [checkedItems, setCheckedItems] = useState({});
+export const Page = ({handleBackPage, pageId, currentSection, currentPage, handleScore, nodeData, checkedItemsMap}) => {   
+    const [checkedItems, setCheckedItems] = useState(checkedItemsMap);
     const [saved, setSaved] = useState(false);
-    let paragraphCounter = 0
+    let paragraphCounter = 0;
+    let paragraphIdMap = {}
+
+    console.log();
+
 
     useEffect(() => {
-        const fetchScore = async () => {
-            try {
-                const score = nodeData.targetNode.pages[currentPage - 1].score
-                // Initialize the checkedItems state based on the score
-                const checkedItems = {};
-                for (let i = 0; i < score; i++) {
-                    checkedItems[i] = true;
-                }
-                setCheckedItems(checkedItems);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchScore();
+        const addChecks = () => {
+            Object.keys(checkedItems).length ? null : setCheckedItems(paragraphIdMap);
+        }
+        addChecks();
     }, []);
 
 
@@ -35,9 +29,10 @@ export const Page = ({handleBackPage, currentSection, currentPage, handleScore, 
             const score = calculateScore(checkedItems);
             const res = await api.put(`/api/lessons/${nodeData.lessonId}/sections/${nodeData.section}/pages/${currentPage}`, {
                 completed: score === 100 ? true : false, 
-                score: score
+                score: score,
+                checkedItems: checkedItems
             })
-            console.log(res);
+            console.log("Page-Handlesave ",res);
             const updateScore = await api.put(`/api/lessons/${nodeData.lessonId}/sections/${nodeData.section}`, {score: score});
             console.log("Updated Score!", updateScore);
         } catch (error) {
@@ -73,6 +68,7 @@ export const Page = ({handleBackPage, currentSection, currentPage, handleScore, 
                 p: ({node, ...props}) => {
                     paragraphCounter++;
                     const paragraphId = node.position.start.offset
+                    paragraphIdMap[paragraphId] = false
                     return (
                         <div>
                             <p {...props} />
