@@ -12,8 +12,8 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
     const [isUpdating, setIsUpdating] = useState(false);
     const [started, setStarted] = useState(nodeData.targetNode.started);
     const [score, setScore] = useState(nodeData.targetNode.score);
+    const [checkedItems, setCheckedItems] = useState({});
 
-   
 
   
     const fetchPage = async () => {
@@ -23,8 +23,9 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
         try {
             const res = await api.get(`/api/lessons/${lessonId}/sections/${sectionName}/pages/${page}`)
             const pageData = res.data.content
-            console.log("FETCH PAGE", pageData);
+            console.log("FETCH PAGE", res.data);
             setCurrentSection(pageData)
+            setCheckedItems(res.data.checkedItems)
         } catch (error) {
             console.error(error)
         }
@@ -43,7 +44,7 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
     const handleBackPage = () => {
         setCurrentPage(currentPage - 1);
     }
-    
+
     const handleNextPage = async () => {
         setCurrentPage(currentPage + 1);
     }
@@ -103,6 +104,8 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
                 handleScore={handleScore}
                 nodeData={nodeData}
                 currentPage={currentPage}
+                checkedItems={checkedItems}
+                setCheckedItems={setCheckedItems}
                 checkedItemsMap={nodeData.targetNode.pages ? nodeData.targetNode.pages.find(page => page.page === currentPage)?.checkedItems : {}}
             />)}
         </div>

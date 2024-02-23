@@ -4,10 +4,10 @@ import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkSlug from 'remark-slug'
 import { updateEdge } from 'reactflow'
+import { set } from 'mongoose'
 
 
-export const Page = ({handleBackPage, pageId, currentSection, currentPage, handleScore, nodeData, checkedItemsMap}) => {   
-    const [checkedItems, setCheckedItems] = useState({});
+export const Page = ({handleBackPage, pageId, checkedItems, setCheckedItems, currentSection, currentPage, handleScore, nodeData, checkedItemsMap}) => {   
     const [saved, setSaved] = useState(false);
     let paragraphCounter = 0;
     let paragraphIdMap = {}
