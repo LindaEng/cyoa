@@ -23,6 +23,33 @@ const getLessonById = async (req, res) => {
     }
 }
 
+const getSection = async (req, res) => {
+    try {
+        const lessonId = req.params.lessonId
+        const sectionTitle = req.params.sectionTitle
+        const section = await LessonPlan.findOne({ _id: lessonId }, { sections: { $elemMatch: { title: sectionTitle } } })
+        res.status(200).json(section)
+    } catch (error) {
+        console.log(error)
+        res.status(404).json({message: "Section Not Found"})
+    }
+}
+
+const getPageById = async (req, res) => {
+    try {
+        const lessonId = req.params.lessonId
+        const sectionTitle = req.params.sectionTitle
+        const pageId = req.params.pageId
+        const lesson = await LessonPlan.findById(lessonId)
+        const section = lesson.sections.find(section => section.title === sectionTitle)
+        const page = section.pages.find(page => page.page === parseInt(pageId))
+        res.status(200).json(page)
+    } catch (error) {
+        console.log(error)
+        res.status(404).json({message: "Page Not Found"})
+    }
+}
+
 const createLesson = async (req, res) => {
     try {
         const newLesson = req.body
@@ -125,4 +152,4 @@ const deleteLesson = async (req, res) => {
     }
 }
 
-export { getLessons, getLessonById, createLesson, updateLesson, updatePage, updateSection, deleteLesson }
+export { getLessons, getLessonById, getSection, getPageById, createLesson, updateLesson, updatePage, updateSection, deleteLesson }

@@ -6,7 +6,6 @@ export const ProgressRadialChart = ({ progress }) => {
 
   useEffect(() => {
     d3.select(ref.current).selectAll('svg').remove();
-    console.log('Progress:', progress); // Debug: Print progress value
 
     const width = 200;
     const height = 200;

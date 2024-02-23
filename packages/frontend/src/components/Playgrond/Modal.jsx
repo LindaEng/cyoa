@@ -13,6 +13,28 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
     const [started, setStarted] = useState(nodeData.targetNode.started);
     const [score, setScore] = useState(nodeData.targetNode.score);
 
+   
+
+  
+    const fetchPage = async () => {
+        let lessonId = nodeData.lessonId
+        let sectionName = nodeData.section
+        let page = currentPage
+        try {
+            const res = await api.get(`/api/lessons/${lessonId}/sections/${sectionName}/pages/${page}`)
+            const pageData = res.data.content
+            console.log("FETCH PAGE", pageData);
+            setCurrentSection(pageData)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    useEffect(() => {
+        fetchPage()
+    }, [currentPage]);
+
+
 
     const handleMaximize = () => {
         setIsMaximized(!isMaximized);
@@ -21,9 +43,8 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
     const handleBackPage = () => {
         setCurrentPage(currentPage - 1);
     }
-    const handleNextPage = () => {
-        const content = nodeData.targetNode.pages[currentPage].content
-        setCurrentSection(content);
+    
+    const handleNextPage = async () => {
         setCurrentPage(currentPage + 1);
     }
 
@@ -46,7 +67,6 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
     }
 
     const handleScore = (score) => {
-        console.log("handle score from Modal ",score)
         setScore(score);
     }
 
@@ -83,7 +103,7 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
                 handleScore={handleScore}
                 nodeData={nodeData}
                 currentPage={currentPage}
-                checkedItemsMap={(nodeData.targetNode.pages.find(page => page.page === currentPage)?.checkedItems ?? {})}
+                checkedItemsMap={nodeData.targetNode.pages ? nodeData.targetNode.pages.find(page => page.page === currentPage)?.checkedItems : {}}
             />)}
         </div>
         </Draggable>        

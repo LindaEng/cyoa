@@ -7,7 +7,7 @@ import { updateEdge } from 'reactflow'
 
 
 export const Page = ({handleBackPage, pageId, currentSection, currentPage, handleScore, nodeData, checkedItemsMap}) => {   
-    const [checkedItems, setCheckedItems] = useState(checkedItemsMap);
+    const [checkedItems, setCheckedItems] = useState({});
     const [saved, setSaved] = useState(false);
     let paragraphCounter = 0;
     let paragraphIdMap = {}
@@ -17,7 +17,7 @@ export const Page = ({handleBackPage, pageId, currentSection, currentPage, handl
 
     useEffect(() => {
         const addChecks = () => {
-            Object.keys(checkedItems).length ? null : setCheckedItems(paragraphIdMap);
+            (checkedItemsMap != undefined) ? setCheckedItems(checkedItemsMap) : setCheckedItems(paragraphIdMap);
         }
         addChecks();
     }, []);
@@ -43,7 +43,7 @@ export const Page = ({handleBackPage, pageId, currentSection, currentPage, handl
     const calculateScore = (items) => {
         let score = 0;
         for (const item in checkedItems) {
-            if (item) score++;
+            if (checkedItems[item] === true) score++;
         }
         score = Math.round((score / paragraphCounter) * 100);
         return score;
@@ -60,9 +60,9 @@ export const Page = ({handleBackPage, pageId, currentSection, currentPage, handl
     };
     
     return (
-        <div className={`mt-8 p-8 overflow-auto`}>
+        <div className={`mt-8 p-8 h-auto w-full overflow-auto `}>
             <Markdown
-              className={`prose lg:prose-xl`}
+              className={`prose lg:prose-xl `}
               remarkPlugins={[remarkGfm, [remarkSlug, {slugify: s => s.toLowerCase()}]]}
               components={{
                 p: ({node, ...props}) => {
