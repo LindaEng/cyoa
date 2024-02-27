@@ -12,7 +12,6 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
     const [isUpdating, setIsUpdating] = useState(false);
     const [started, setStarted] = useState(nodeData.targetNode.started);
     const [score, setScore] = useState(nodeData.targetNode.score);
-    const [checkedItems, setCheckedItems] = useState({});
 
 
   
@@ -25,7 +24,6 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
             const pageData = res.data.content
             console.log("FETCH PAGE", res.data);
             setCurrentSection(pageData)
-            setCheckedItems(res.data.checkedItems)
         } catch (error) {
             console.error(error)
         }
@@ -104,8 +102,6 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
                 handleScore={handleScore}
                 nodeData={nodeData}
                 currentPage={currentPage}
-                checkedItems={checkedItems}
-                setCheckedItems={setCheckedItems}
                 checkedItemsMap={nodeData.targetNode.pages ? nodeData.targetNode.pages.find(page => page.page === currentPage)?.checkedItems : {}}
             />)}
         </div>

@@ -7,8 +7,10 @@ import { updateEdge } from 'reactflow'
 import { set } from 'mongoose'
 
 
-export const Page = ({handleBackPage, pageId, checkedItems, setCheckedItems, currentSection, currentPage, handleScore, nodeData, checkedItemsMap}) => {   
+export const Page = ({handleBackPage, pageId, currentSection, currentPage, handleScore, nodeData, checkedItemsMap}) => {   
     const [saved, setSaved] = useState(false);
+    const [checkedItems, setCheckedItems] = useState({});
+
     let paragraphCounter = 0;
     let paragraphIdMap = {}
 

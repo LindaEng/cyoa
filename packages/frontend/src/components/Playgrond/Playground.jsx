@@ -84,7 +84,10 @@ export const Playground = () => {
                 const nodes = lesson?.sections?.map((section, index) => {
                     return {
                         id: index.toString(),
-                        position: {...initialPosition, y: initialPosition.y + index * 100},
+                        position: {
+                            x: initialPosition.x + Math.sin(index) * 100, // adjust the multiplier as needed
+                            y: initialPosition.y + index * 100
+                        },
                         data: {label: section.title},
                     }
                 }) || [];
