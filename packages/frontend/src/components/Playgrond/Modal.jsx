@@ -9,12 +9,11 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
     const [isMaximized, setIsMaximized] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [currentSection, setCurrentSection] = useState(``);
+    const [currentNode, setCurrentNode] = useState(nodeData.targetNode);
     const [isUpdating, setIsUpdating] = useState(false);
     const [started, setStarted] = useState(nodeData.targetNode.started);
     const [score, setScore] = useState(nodeData.targetNode.score);
 
-
-  
     const fetchPage = async () => {
         let lessonId = nodeData.lessonId
         let sectionName = nodeData.section
@@ -22,8 +21,10 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
         try {
             const res = await api.get(`/api/lessons/${lessonId}/sections/${sectionName}/pages/${page}`)
             const pageData = res.data.content
-            console.log("FETCH PAGE", res.data);
+            console.log("FETCH PAGE DATA", res.data);
             setCurrentSection(pageData)
+            setCurrentNode(res.data)
+            return res.data
         } catch (error) {
             console.error(error)
         }
@@ -90,7 +91,10 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
                 <div className={`flex`}>
                     <ProgressRadialChart progress={score} />
                     <div className={`flex flex-col items-center justify-center p-4 ml-5 w-3/4`}>
-                        {started ? <button className={`p-2 mb-5 bg-green-700 text-white w-full`} onClick={handleNextPage}>Continue</button> : <button className={`p-2 mb-5 bg-green-700 text-white w-full`} onClick={handleStartSection}>{isUpdating ? `Loading Content...` : `Start Section`}</button>}
+                        {started ? <button className={`p-2 mb-5 bg-green-700 text-white w-full`} onClick={() => {
+                            handleNextPage()
+                        }    
+                        }>Continue</button> : <button className={`p-2 mb-5 bg-green-700 text-white w-full`} onClick={handleStartSection}>{isUpdating ? `Loading Content...` : `Start Section`}</button>}
                         
                         <button className={`p-2 bg-blue-500 text-white w-full`}>Quiz Me</button>
                     </div>
@@ -102,7 +106,8 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
                 handleScore={handleScore}
                 nodeData={nodeData}
                 currentPage={currentPage}
-                checkedItemsMap={nodeData.targetNode.pages ? nodeData.targetNode.pages.find(page => page.page === currentPage)?.checkedItems : {}}
+                checkedItemsMap={currentNode.checkedItems ? currentNode.checkedItems : {}}
+            
             />)}
         </div>
         </Draggable>        

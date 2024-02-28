@@ -4,27 +4,22 @@ import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkSlug from 'remark-slug'
 import { updateEdge } from 'reactflow'
-import { set } from 'mongoose'
 
 
 export const Page = ({handleBackPage, pageId, currentSection, currentPage, handleScore, nodeData, checkedItemsMap}) => {   
     const [saved, setSaved] = useState(false);
     const [checkedItems, setCheckedItems] = useState({});
-
     let paragraphCounter = 0;
     let paragraphIdMap = {}
 
-    console.log();
-
-
     useEffect(() => {
+ console.log("PAGE CHECKEDITEMS MAP",checkedItemsMap)
+
         const addChecks = () => {
             (checkedItemsMap != undefined) ? setCheckedItems(checkedItemsMap) : setCheckedItems(paragraphIdMap);
         }
         addChecks();
-    }, []);
-
-
+    }, [checkedItemsMap]);
 
     const handleSave = async () => {
         try {
@@ -34,9 +29,7 @@ export const Page = ({handleBackPage, pageId, currentSection, currentPage, handl
                 score: score,
                 checkedItems: checkedItems
             })
-            console.log("Page-Handlesave ",res);
             const updateScore = await api.put(`/api/lessons/${nodeData.lessonId}/sections/${nodeData.section}`, {score: score});
-            console.log("Updated Score!", updateScore);
         } catch (error) {
             console.error(error);
         }
