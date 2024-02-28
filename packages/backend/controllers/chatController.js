@@ -31,6 +31,8 @@ Understand the significance of studying asteroids, including their potential imp
 const sectionPrompt = `You are an AI that will take a lesson plan to use as context, and the section title and content to generate new sections to fill in the lesson. Make sure to include examples and explanations to make the content comprehensive.
 The response should be in markdown format`
 
+const quizPrompt = "You are an AI programmed to utilize a provided lesson plan as context. Your task is to generate new pages to supplement the lesson using the given page title and content. Your output should include comprehensive quiz questions and answers. Avoid oversimplification and strive for diversity in problem creation to ensure a thorough understanding of the content for the student. The generated content should be formatted in Markdown."
+
 
 export const postChat = async (req, res) => {
     const userMessage = req.body.message
@@ -56,7 +58,7 @@ export const postChat = async (req, res) => {
 export const postSectionChat = async (req, res) => {
     const {sectionInfo, section } = req.body
     const userMessage =`I want to add content to this section: ${section} with context from ${sectionInfo}. Please explain the concepts and provide examples to make the content comprehensive. I am looking for a detailed explanation in markdown format.`
-    
+
     const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
         messages: [
@@ -69,6 +71,27 @@ export const postSectionChat = async (req, res) => {
                 content: userMessage
             }
         ],
+
+    }) 
+    console.log(response['usage']['total_tokens']);
+    res.json(response['choices'][0]['message']['content'])
+}
+
+export const postQuizChat = async (req, res) => {
+    const {pageInfo, page} = req.body
+    const userMessage = `I want to add a quiz to this page: ${page} with context from ${pageInfo}. Please provide questions and answers to make the quiz comprehensive. Do not make the quiz too simple. Create diverse problems and ensure that I am going to fully understand the content once I am done. I am looking for a detailed explanation in markdown format.`
+    const response = await openai.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [
+            {
+                role: 'system',
+                content: quizPrompt
+            },
+            {
+                role: 'user',
+                content: userMessage
+            }
+        ]
 
     }) 
     console.log(response['usage']['total_tokens']);
