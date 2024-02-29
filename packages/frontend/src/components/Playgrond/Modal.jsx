@@ -35,7 +35,6 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
     }, [currentPage]);
 
 
-
     const handleMaximize = () => {
         setIsMaximized(!isMaximized);
     };
@@ -73,10 +72,10 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
     return (
         <Draggable>
         <div
-            className={`absolute ${isMaximized ? 'w-11/12 h-auto' : 'w-1/2 h-auto'} bg-white border-2 border-black overflow-auto z-50 p-4 rounded`}
+            className={`absolute ${isMaximized ? 'w-11/12 h-full' : 'w-1/2 h-3/5'} bg-white border-2 border-black overflow-auto z-50 rounded`}
             style={isMaximized ? {top: '5%', left: '5%'} : {top: '25%', left: '25%'}}
         >
-            <div className={`absolute top-0 left-0 w-full h-6 bg-orange-500 flex justify-end items-center p-1 border-b-2 border-black`}>
+            <div className={`sticky top-0 left-0 w-full h-6 bg-orange-500 flex justify-end items-center p-1 border-b-2 border-black`}>
                 <button className={`mr-1`}>_</button>
                 <button className={`mr-1`} onClick={handleMaximize}>{(isMaximized) ? '><' : '□'}</button>
                 <button className={`mr-1`} onClick={() => {
@@ -85,6 +84,7 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
                 }}>X</button>
             </div>
             {currentPage === 0 ? (<>
+            <div className={`pl-6 pr-6`}>
                 <h1 className={`text-2xl font-bold pt-8 pb-4`}>{title}</h1>
                 <hr className={`border border-dotted border-black my-4`}/>
                 <p>{sectionInfo}</p>
@@ -94,11 +94,11 @@ export const Modal = ({handleModalClose, title, sectionInfo, nodeData, lesson}) 
                         {started ? <button className={`p-2 mb-5 bg-green-700 text-white w-full`} onClick={() => {
                             handleNextPage()
                         }    
-                        }>Continue</button> : <button className={`p-2 mb-5 bg-green-700 text-white w-full`} onClick={handleStartSection}>{isUpdating ? `Loading Content...` : `Start Section`}</button>}
+                        }>Continue</button> : <button className={`p-2 mb-5 bg-green-700 text-white w-full`} onClick={handleStartSection}>{isUpdating ? `Loading Content...` : `Start Section`}</button>}                   
                         
-                        <button className={`p-2 bg-blue-500 text-white w-full`}>Quiz Me</button>
                     </div>
                 </div>
+            </div>
             </>) : 
             (<Page
                 handleBackPage={handleBackPage}

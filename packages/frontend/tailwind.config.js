@@ -9,6 +9,12 @@ export default {
         '0': '0ms',
         '500': '500ms',
       },
+      resize: {
+        'none': 'none',
+        'y': 'vertical',
+        'x': 'horizontal',
+        'both': 'both'
+      }
     },
   },
   variants: {

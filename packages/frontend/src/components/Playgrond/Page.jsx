@@ -35,6 +35,16 @@ export const Page = ({handleBackPage, pageId, currentSection, currentPage, handl
         }
     }
 
+    const handleQuiz = async () => {
+        try {
+            const pageInfo = currentSection
+            const res = await api.post(`/api/chat/quiz`, { pageInfo: pageInfo })
+            console.log(res);
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     const calculateScore = (items) => {
         let score = 0;
         for (const item in checkedItems) {
@@ -55,7 +65,7 @@ export const Page = ({handleBackPage, pageId, currentSection, currentPage, handl
     };
     
     return (
-        <div className={`mt-8 p-8 h-auto w-full overflow-auto `}>
+        <div className={`mt-8 p-8`}>
             <Markdown
               className={`prose lg:prose-xl `}
               remarkPlugins={[remarkGfm, [remarkSlug, {slugify: s => s.toLowerCase()}]]}
@@ -74,13 +84,14 @@ export const Page = ({handleBackPage, pageId, currentSection, currentPage, handl
                 },
             }} 
             >{currentSection}</Markdown>
-            <button className={`mt-4 pl-4 pr-4 bg-blue-600 text-white rounded`} onClick={()=> {
+            <button className={`mr-4 pl-4 pr-4 bg-blue-600 text-white rounded`} onClick={()=> {
                 handleBackPage()
                 handleScore(calculateScore(checkedItems))
                 }}>Back</button>   
-            <button className={`mt-4 pl-4 pr-4 bg-green-600 text-white rounded`} onClick={()=> {
+            <button className={`m-4 pl-4 pr-4 bg-green-600 text-white rounded`} onClick={()=> {
                 handleSave()
-                 }}>Save</button>        
+                 }}>Save</button>  
+            <button className={`mr-4 p-2 bg-blue-500 text-white w-full`} onClick={handleQuiz}>Quiz Me</button>      
         </div>
     )
 }
